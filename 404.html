@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>404 — Página no encontrada · Astralis Network</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    /* ---------- Base / Tipografía ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Courier New", monospace; }
+    html,body { height: 100%; }
+    body {
+      background: radial-gradient(circle at top, #150b2e 0%, #080412 100%);
+      color: #fff;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 2rem;
+    }
+
+    /* ---------- Canvas (fondo de estrellas y partículas) ---------- */
+    canvas#stars, canvas#particles {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      z-index: -2;
+    }
+
+    /* ---------- Contenedor central ---------- */
+    .card {
+      width: 100%;
+      max-width: 980px;
+      background: rgba(18,10,34,0.70);
+      border: 2px solid rgba(140,80,255,0.16);
+      border-radius: 14px;
+      padding: 2.4rem;
+      box-shadow: 0 10px 40px rgba(40,10,80,0.45);
+      backdrop-filter: blur(6px);
+      position: relative;
+    }
+
+    .glow {
+      color: #c8a6ff;
+      text-shadow: 0 0 22px rgba(122,66,244,0.35);
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      margin-bottom: 0.6rem;
+      color: #b180ff;
+      letter-spacing: 1px;
+    }
+
+    p.lead {
+      color: #dcd6ff;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    p.detail {
+      color: #cfc9e8;
+      margin-bottom: 1.6rem;
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    /* ---------- Botones ---------- */
+    .actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 0.6rem;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, #7a42f4, #b180ff);
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.3rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform .18s ease, box-shadow .18s ease;
+      box-shadow: 0 6px 18px rgba(122,66,244,0.15);
+    }
+    .btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(168,85,247,0.28);
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 2px solid rgba(120,60,255,0.28);
+      color: #fff;
+    }
+    .btn.secondary:hover {
+      background: rgba(122,66,244,0.08);
+    }
+
+    /* ---------- Marco animado alrededor ---------- */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 16px;
+      background: linear-gradient(90deg, transparent, rgba(150,90,255,0.12), transparent);
+      z-index: -1;
+      pointer-events: none;
+      filter: blur(10px);
+      opacity: 0.9;
+      animation: borderMove 8s linear infinite;
+      background-size: 300% 300%;
+    }
+    @keyframes borderMove { from { background-position: 0% 50% } to { background-position: 300% 50% } }
+
+    /* ---------- Pequeño texto técnico ---------- */
+    .meta {
+      margin-top: 1rem;
+      color: #aaa;
+      font-size: 0.85rem;
+    }
+
+    /* ---------- Botón subir arriba (opcional) ---------- */
+    #scrollTopBtn {
+      position: fixed; right: 20px; bottom: 20px;
+      width: 46px; height: 46px; border-radius: 50%;
+      border: none; background: #7a42f4; color: #fff;
+      font-size: 1.2rem; cursor: pointer; display: none;
+      box-shadow: 0 6px 18px rgba(122,66,244,0.18);
+    }
+    #scrollTopBtn:hover { background: #b180ff; }
+
+    @media (max-width:540px) {
+      h1 { font-size: 2.2rem; }
+      .card { padding: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <canvas id="particles"></canvas>
+
+  <main class="card" role="main" aria-labelledby="title-404">
+    <h1 id="title-404" class="glow">404 — Página no encontrada</h1>
+    <p class="lead">Lo sentimos, parece que te has perdido en el espacio.</p>
+    <p class="detail">
+      La página que buscas no existe o fue movida. Puedes volver al inicio de Astralis Network, abrir la tienda oficial o
+      visitar nuestro Discord para ayuda inmediata.
+    </p>
+
+    <div class="actions" role="navigation" aria-label="Acciones">
+      <button class="btn" onclick="location.href='/'" title="Volver al inicio">🏠 Ir al inicio</button>
+      <button class="btn secondary" onclick="location.href='/category/rangos'" title="Ir a la tienda">🛒 Ver Rangos</button>
+      <button class="btn secondary" onclick="window.open('https://discord.gg/d3z7V4vG6x','_blank')" title="Abrir Discord">💬 Discord</button>
+    </div>
+
+    <p class="meta" id="meta-info">Si crees que esto es un error, contacta: astralisnetmc@gmail.com</p>
+  </main>
+
+  <button id="scrollTopBtn" aria-label="Subir arriba" title="Subir arriba">⬆</button>
+
+  <script>
+    // ---------- Fondo de estrellas ----------
+    const starsCanvas = document.getElementById('stars');
+    const sCtx = starsCanvas.getContext('2d');
+    let stars = [];
+    function resizeStars(){
+      starsCanvas.width = innerWidth; starsCanvas.height = innerHeight;
+      stars = Array(150).fill().map(()=>({
+        x: Math.random()*innerWidth,
+        y: Math.random()*innerHeight,
+        r: Math.random()*1.6+0.2,
+        v: 0.2 + Math.random()*0.45
+      }));
+    }
+    function drawStars(){
+      sCtx.clearRect(0,0,starsCanvas.width,starsCanvas.height);
+      sCtx.fillStyle = "#fff";
+      stars.forEach(st=>{
+        sCtx.globalAlpha = 0.3 + Math.random()*0.8;
+        sCtx.beginPath();
+        sCtx.arc(st.x, st.y, st.r, 0, Math.PI*2);
+        sCtx.fill();
+        st.y += st.v;
+        if(st.y > starsCanvas.height) st.y = 0;
+      });
+      requestAnimationFrame(drawStars);
+    }
+    resizeStars(); drawStars();
+    addEventListener('resize', resizeStars);
+
+    // ---------- Partículas moradas ----------
+    const pCanvas = document.getElementById('particles');
+    const pCtx = pCanvas.getContext('2d');
+    let particles = [];
+    function resizeParticles(){
+      pCanvas.width = innerWidth; pCanvas.height = innerHeight;
+      particles = Array(40).fill().map(()=>({
+        x: Math.random()*innerWidth,
+        y: Math.random()*innerHeight,
+        r: 2 + Math.random()*3,
+        dx: (Math.random()-0.5)*0.4,
+        dy: (Math.random()-0.5)*0.4
+      }));
+    }
+    function drawParticles(){
+      pCtx.clearRect(0,0,pCanvas.width,pCanvas.height);
+      pCtx.fillStyle = "#b180ff";
+      particles.forEach(pt=>{
+        pCtx.globalAlpha = 0.35 + Math.random()*0.6;
+        pCtx.beginPath();
+        pCtx.arc(pt.x, pt.y, pt.r, 0, Math.PI*2);
+        pCtx.fill();
+        pt.x += pt.dx; pt.y += pt.dy;
+        if(pt.x < 0 || pt.x > pCanvas.width) pt.dx *= -1;
+        if(pt.y < 0 || pt.y > pCanvas.height) pt.dy *= -1;
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    resizeParticles(); drawParticles();
+    addEventListener('resize', resizeParticles);
+
+    // ---------- Botón subir arriba ----------
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+      scrollBtn.style.display = (window.scrollY > 300) ? 'block' : 'none';
+    });
+    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // ---------- Mejora de accesibilidad: foco en primer botón ----------
+    document.querySelector('.btn')?.focus();
+  </script>
+</body>
+</html>
