@@ -9,8 +9,92 @@
   <meta name="robots" content="index, follow">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="language" content="Spanish">
-
   <title>Astralis Network | Web Oficial</title>
+  <link rel="stylesheet" id="silktide-consent-manager-css" href="path-to-css/silktide-consent-manager.css">
+<script src="path-to-js/silktide-consent-manager.js"></script>
+<script>
+silktideCookieBannerManager.updateCookieBannerConfig({
+  background: {
+    showBackground: true
+  },
+  cookieIcon: {
+    position: "bottomLeft"
+  },
+  cookieTypes: [
+    {
+      id: "necesarias",
+      name: "Necesarias",
+      description: "<p>Estas <b>cookies son necesarias</b> para que el sitio web funcione correctamente y no pueden ser desactivadas. Ayudan con asuntos como el inicio de sesión y la configuración de sus preferencias de privacidad.</p>",
+      required: true,
+      onAccept: function() {
+        console.log('Add logic for the required Necesarias here');
+      }
+    },
+    {
+      id: "anal_ticas",
+      name: "Analíticas",
+      description: "<p>aaaaaaaaaaaaaEstas cookies nos ayudan a <b>mejorar el sitio</b> al rastrear qué páginas son las más populares y cómo se mueven los visitantes dentro de él.</p>",
+      required: false,
+      onAccept: function() {
+        gtag('consent', 'update', {
+          analytics_storage: 'granted',
+        });
+        dataLayer.push({
+          'event': 'consent_accepted_anal_ticas',
+        });
+      },
+      onReject: function() {
+        gtag('consent', 'update', {
+          analytics_storage: 'denied',
+        });
+      }
+    },
+    {
+      id: "anuncios",
+      name: "Anuncios",
+      description: "<p>Estas cookies ofrecen <b>funciones adicionales y personalización</b> para mejorar su experiencia. Pueden ser establecidas por nosotros o por socios cuyos servicios utilizamos.</p>",
+      required: false,
+      onAccept: function() {
+        gtag('consent', 'update', {
+          ad_storage: 'granted',
+          ad_user_data: 'granted',
+          ad_personalization: 'granted',
+        });
+        dataLayer.push({
+          'event': 'consent_accepted_anuncios',
+        });
+      },
+      onReject: function() {
+        gtag('consent', 'update', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+        });
+      }
+    }
+  ],
+  text: {
+    banner: {
+      description: "<p>Utilizamos cookies en nuestro sitio para <b>mejorar su experiencia</b>, ofrecer <b>contenido personalizado</b> y <b>analizar nuestro tráfico</b>. [Enlace a] Política de Cookies.</p>",
+      acceptAllButtonText: "Aceptar todas",
+      acceptAllButtonAccessibleLabel: "Aceptar todas las cookies",
+      rejectNonEssentialButtonText: "Rechazar no esenciales",
+      rejectNonEssentialButtonAccessibleLabel: "Rechazar las cookies no esenciales",
+      preferencesButtonText: "Preferencias",
+      preferencesButtonAccessibleLabel: "Ajustes de las cookies"
+    },
+    preferences: {
+      title: "Cambia tus preferencias de las cookies",
+      description: "<p><b>Respetamos su derecho a la privacidad.</b> Usted puede optar por no permitir algunos tipos de cookies. Sus preferencias de cookies se aplicarán en todo nuestro sitio web.</p>",
+      creditLinkText: "Obtén este aviso gratuitamente",
+      creditLinkAccessibleLabel: "Obtén este aviso gratuitamente"
+    }
+  },
+  position: {
+    banner: "bottomRight"
+  }
+});
+</script>
  <style>
   * {
     margin: 0; padding: 0; box-sizing: border-box;
