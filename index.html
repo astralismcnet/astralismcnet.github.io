@@ -9,92 +9,9 @@
   <meta name="robots" content="index, follow">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="language" content="Spanish">
+  <meta name="og:title" content="Astralis Network">
+  <meta name="og:description" content="Network de Minecraft Java y Bedrock">
   <title>Astralis Network | Web Oficial</title>
-  <link rel="stylesheet" id="silktide-consent-manager-css" href="path-to-css/silktide-consent-manager.css">
-<script src="path-to-js/silktide-consent-manager.js"></script>
-<script>
-silktideCookieBannerManager.updateCookieBannerConfig({
-  background: {
-    showBackground: true
-  },
-  cookieIcon: {
-    position: "bottomLeft"
-  },
-  cookieTypes: [
-    {
-      id: "necesarias",
-      name: "Necesarias",
-      description: "<p>Estas <b>cookies son necesarias</b> para que el sitio web funcione correctamente y no pueden ser desactivadas. Ayudan con asuntos como el inicio de sesión y la configuración de sus preferencias de privacidad.</p>",
-      required: true,
-      onAccept: function() {
-        console.log('Add logic for the required Necesarias here');
-      }
-    },
-    {
-      id: "anal_ticas",
-      name: "Analíticas",
-      description: "<p>Estas cookies nos ayudan a <b>mejorar el sitio</b> al rastrear qué páginas son las más populares y cómo se mueven los visitantes dentro de él.</p>",
-      required: false,
-      onAccept: function() {
-        gtag('consent', 'update', {
-          analytics_storage: 'granted',
-        });
-        dataLayer.push({
-          'event': 'consent_accepted_anal_ticas',
-        });
-      },
-      onReject: function() {
-        gtag('consent', 'update', {
-          analytics_storage: 'denied',
-        });
-      }
-    },
-    {
-      id: "anuncios",
-      name: "Anuncios",
-      description: "<p>Estas cookies ofrecen <b>funciones adicionales y personalización</b> para mejorar su experiencia. Pueden ser establecidas por nosotros o por socios cuyos servicios utilizamos.</p>",
-      required: false,
-      onAccept: function() {
-        gtag('consent', 'update', {
-          ad_storage: 'granted',
-          ad_user_data: 'granted',
-          ad_personalization: 'granted',
-        });
-        dataLayer.push({
-          'event': 'consent_accepted_anuncios',
-        });
-      },
-      onReject: function() {
-        gtag('consent', 'update', {
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied',
-        });
-      }
-    }
-  ],
-  text: {
-    banner: {
-      description: "<p>Utilizamos cookies en nuestro sitio para <b>mejorar su experiencia</b>, ofrecer <b>contenido personalizado</b> y <b>analizar nuestro tráfico</b>. [Enlace a] Política de Cookies.</p>",
-      acceptAllButtonText: "Aceptar todas",
-      acceptAllButtonAccessibleLabel: "Aceptar todas las cookies",
-      rejectNonEssentialButtonText: "Rechazar no esenciales",
-      rejectNonEssentialButtonAccessibleLabel: "Rechazar las cookies no esenciales",
-      preferencesButtonText: "Preferencias",
-      preferencesButtonAccessibleLabel: "Ajustes de las cookies"
-    },
-    preferences: {
-      title: "Cambia tus preferencias de las cookies",
-      description: "<p><b>Respetamos su derecho a la privacidad.</b> Usted puede optar por no permitir algunos tipos de cookies. Sus preferencias de cookies se aplicarán en todo nuestro sitio web.</p>",
-      creditLinkText: "Obtén este aviso gratuitamente",
-      creditLinkAccessibleLabel: "Obtén este aviso gratuitamente"
-    }
-  },
-  position: {
-    banner: "bottomRight"
-  }
-});
-</script>
  <style>
   * {
     margin: 0; padding: 0; box-sizing: border-box;
@@ -148,6 +65,33 @@ silktideCookieBannerManager.updateCookieBannerConfig({
 
   /* --- Título Tienda --- */
   .store-title { margin-top: 5rem; font-size: 2.2rem; color: #b180ff; text-shadow: 0 0 15px #7a42f4; }
+
+  /* --- Widget Estado Servidor --- */
+  .server-status {
+    margin-top: 2rem;
+    padding: 1.5rem 2rem;
+    background: rgba(20, 10, 40, 0.7);
+    border: 1px solid rgba(180, 100, 255, 0.2);
+    border-radius: 16px;
+    animation: fadeIn 1.8s ease;
+    max-width: 500px;
+  }
+  .server-status h3 {
+    font-size: 1.6rem;
+    background: linear-gradient(90deg, #a855f7, #6366f1, #9333ea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200%;
+    transition: background-position 0.6s ease;
+  }
+  .server-status h3:hover { background-position: right; }
+  .server-status p { color: #ccc; margin-top: 0.6rem; }
+  .status-online { color: #00ff99; }
+  .status-offline { color: #ff3366; }
+  .server-icon {
+    width: 64px; height: 64px; margin-top: 10px;
+    border-radius: 12px; box-shadow: 0 0 20px rgba(150,80,255,0.5);
+  }
 
   /* --- Categorías --- */
   .categories {
@@ -266,13 +210,81 @@ silktideCookieBannerManager.updateCookieBannerConfig({
   <canvas id="stars"></canvas>
   <canvas id="particles"></canvas>
 
-  <!-- 🔔 Banner (activar/desactivar con class="banner hidden") -->
-  <div class="banner">Estás viendo una versión BETA de la página web. Reporta cualquier error por Discord</div>
+  <!-- 🔔 Banner -->
+  <div class="banner" onclick="window.location.href='https://astralismc.tip4serv.com/#tab_4'">¡Hemos abierto una nueva tienda! <button>¡Verla!</button></div>
 
   <section class="welcome">
     <h1>🌌 Bienvenido a Astralis Network 🌌</h1>
     <p>Tu aventura estelar comienza aquí. Somos un pequeño servidor de Minecraft con la modalidad de survival y otras en desarrollo. Explora nuestra tienda galáctica con rangos, dinero y objetos únicos para tu aventura.</p>
   </section>
+
+  <!-- 🌌 Widget Estado del Servidor -->
+  <div class="server-status">
+    <h3>Estado del Servidor</h3>
+    <p id="status">Comprobando estado...</p>
+    <p id="players"></p>
+  </div>
+
+<!-- 🪐 Estado del servidor de Discord con animación de actualización -->
+<section id="discord-status" class="discord-status" style="animation:fadeIn 2s ease;margin-top:3rem;">
+  <h2 style="color:#b180ff;text-shadow:0 0 15px #7a42f4;">💬 Discord Astralis Network</h2>
+  <p id="discord-online" style="color:#ccc;margin-top:0.5rem;">Cargando estado...</p>
+</section>
+
+<script>
+  const discordOnline = document.getElementById("discord-online");
+
+  async function loadDiscordStatus() {
+    try {
+      // Mostrar mensaje de animación tipo loader
+      discordOnline.innerHTML = '🌌 Contactando con nuestro satélite...';
+      discordOnline.style.animation = 'fadeIn 1s ease';
+
+      const res = await fetch("https://discord.com/api/guilds/1151500409144365056/widget.json"); // 👈 Reemplaza TU_ID con tu servidor
+      const data = await res.json();
+
+      // Espera mínima para que se vea el mensaje de carga (opcional)
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Mostrar número de usuarios conectados
+      discordOnline.textContent = `👥 Usuarios conectados: ${data.presence_count}`;
+      discordOnline.style.animation = 'fadeIn 1s ease';
+
+    } catch (error) {
+      discordOnline.textContent = "❌ Error al contactar con el satélite de Discord.";
+      console.error("Error cargando Discord status:", error);
+    }
+  }
+
+  loadDiscordStatus();
+  setInterval(loadDiscordStatus, 30000); // 🔁 Actualiza cada 30 segundos
+</script>
+
+<style>
+  /* --- Bloque de Discord --- */
+  .discord-status {
+    background: rgba(20, 10, 40, 0.75);
+    border: 1px solid rgba(180, 100, 255, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 400px;
+    margin: 2rem auto;
+    box-shadow: 0 0 25px rgba(150, 80, 255, 0.25);
+    transition: all 0.3s ease;
+  }
+  .discord-status:hover {
+    box-shadow: 0 0 35px rgba(180, 100, 255, 0.35);
+    transform: translateY(-4px);
+  }
+
+  /* --- Animación tipo fadeIn (igual al loader y welcome) --- */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+
 
   <h2 class="store-title"><a href="https://astralismc.tip4serv.com/" style="color:#b180ff">🛒 Comprar en la tienda oficial</a></h2>
 
@@ -290,6 +302,40 @@ silktideCookieBannerManager.updateCookieBannerConfig({
       <h3>💎 Piedras</h3><button>Ver Piedras</button>
     </div>
   </section>
+
+  <!-- 🔧 Script Estado Servidor -->
+  <script>
+    const SERVER_ADDRESS = "astralismc.xyz";
+
+    async function checkServer() {
+      try {
+        const response = await fetch(`https://api.mcsrvstat.us/3/${SERVER_ADDRESS}`);
+        const data = await response.json();
+
+        const statusEl = document.getElementById("status");
+        const playersEl = document.getElementById("players");
+        const iconEl = document.getElementById("icon");
+
+        if (data.online) {
+          statusEl.innerHTML = "🟢 <span class='status-online'>Servidor ONLINE</span>";
+          playersEl.innerHTML = `👥 Jugadores conectados: <span style='color:#b180ff;'>${data.players.online} / ${data.players.max}</span>`;
+          if (data.icon) {
+            iconEl.src = data.icon;
+            iconEl.style.display = "block";
+          } else iconEl.style.display = "none";
+        } else {
+          statusEl.innerHTML = "🔴 <span class='status-offline'>Servidor OFFLINE</span>";
+          playersEl.innerHTML = "";
+          iconEl.style.display = "none";
+        }
+      } catch (e) {
+        console.error("Error al obtener estado del servidor:", e);
+      }
+    }
+
+    checkServer();
+    setInterval(checkServer, 30000);
+  </script>
 
   <section class="news">
     <h2>📰 Noticias del Servidor</h2>
@@ -389,5 +435,24 @@ silktideCookieBannerManager.updateCookieBannerConfig({
     const btn=document.getElementById("scrollTopBtn");
     window.onscroll=()=>{btn.style.display=(window.scrollY>400)?"block":"none";};
   </script>
+<!-- Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+<script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script>
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"dark","language":"es","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"Astralis Network"});
+});
+</script>
+
+<noscript>Herramienta de consentimiento de cookies gratuita de <a href="https://www.termsfeed.com/">TermsFeed</a></noscript>
+<!-- End Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+
+
+
+
+
+<!-- Below is the link that users can use to open Preferences Center to change their preferences. Do not modify the ID parameter. Place it where appropriate, style it as needed. -->
+
+<a href="#" id="open_preferences_center"><button>Actualiza las preferencias de cookies</button></a>
+
 </body>
 </html>
