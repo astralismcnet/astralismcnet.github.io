@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Política de Privacidad — Astralis Network</title>
+  <meta name="description" content="Política de Privacidad y protección de datos de Astralis Network" />
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="favicon.png">
+
+  <style>
+    /* --- Copiado del estilo principal (Courier New, fondo radial, fadeIn...) --- */
+    * { margin:0; padding:0; box-sizing: border-box; font-family: "Courier New", monospace; }
+    html,body { height:100%; }
+
+    body{
+      background: radial-gradient(circle at top, #150b2e 0%, #080412 100%);
+      color: #fff;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* --- Canvas placeholders (same IDs para reusar scripts) --- */
+    canvas#stars, canvas#particles {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; z-index: -2;
+    }
+
+    /* --- Loader (igual que index) --- */
+    #loader {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle, #1a0b2a 0%, #080412 100%);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; z-index: 9999; transition: opacity 1s ease;
+    }
+    #loader.hidden { opacity: 0; pointer-events: none; }
+    .spinner {
+      width: 70px; height: 70px;
+      border: 4px solid rgba(180, 100, 255, 0.3);
+      border-top-color: #b180ff;
+      border-radius: 50%; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loader p { color: #b180ff; margin-top: 1rem; font-size: 1.1rem; }
+
+    /* --- Container principal --- */
+    .container {
+      width: 100%;
+      max-width: 980px;
+      margin: 6rem 20px;
+      background: rgba(20, 10, 40, 0.75);
+      border: 1px solid rgba(180,100,255,0.12);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      animation: fadeIn 1s ease;
+    }
+
+    header {
+      display:flex; align-items:center; gap:14px; justify-content:flex-start;
+      margin-bottom: 8px;
+    }
+    .logo {
+      width:56px; height:56px; border-radius:10px;
+      background: linear-gradient(90deg,#b180ff,#7a42f4);
+      display:flex;align-items:center;justify-content:center;color:#0b0014;font-weight:bold;
+      box-shadow:0 8px 30px rgba(122,66,244,0.15);
+      flex: 0 0 56px;
+    }
+    header h1 {
+      font-size:1.6rem; margin:0;
+      background: linear-gradient(90deg,#b180ff,#7a42f4);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    }
+    header p { margin:0; color:#ccc; font-size:0.94rem; }
+
+    .muted { color:#cfc9e8; font-size:0.95rem; }
+
+    h2 { color:#b180ff; margin-top:18px; margin-bottom:10px; }
+    p, li { color:#e6e1f8; line-height:1.6; font-size:0.98rem; }
+    ul { margin-left:1.2rem; }
+
+    .card {
+      background: rgba(10,6,20,0.3);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top:12px;
+      border: 1px solid rgba(180,100,255,0.06);
+      text-align: left;
+    }
+
+    .actions { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-start; }
+    .btn {
+      background:transparent; border:2px solid #7a42f4; color:white; padding:8px 12px; border-radius:10px;
+      cursor:pointer; transition: all .18s ease;
+    }
+    .btn:hover { background:#7a42f4; border-color:#b180ff; box-shadow:0 6px 18px rgba(122,66,244,0.12); }
+
+    footer { margin-top:18px; color:#999; font-size:0.9rem; text-align:center; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width:720px){
+      .container { margin: 3rem 12px; padding:18px; }
+      header h1 { font-size:1.2rem; }
+</style>
+</head>
+
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+    <p>Cargando la galaxia...</p>
+  </div>
+
+  <!-- Fondos (canvas) -->
+  <canvas id="stars"></canvas>
+  <canvas id="particles"></canvas>
+
+  <!-- Contenido -->
+  <main class="container" role="main" aria-labelledby="title">
+    <header>
+      <div class="logo">AN</div>
+      <div>
+        <h1 id="title">Política de Privacidad</h1>
+        <p class="muted">Astralis Network (Proyecto comunitario) — Última actualización: <strong id="lastUpdated">21 de octubre de 2025</strong></p>
+      </div>
+    </header>
+
+    <!-- Introducción -->
+    <section class="card" aria-label="Introducción">
+      <h2>1. Introducción</h2>
+      <p>En <strong>Astralis Network (Proyecto comunitario)</strong> estamos comprometidos con la protección de tus datos personales y el cumplimiento del Reglamento General de Protección de Datos (RGPD). Esta Política describe qué datos recolectamos, con qué fines, sobre qué base legal, cuánto tiempo los conservamos y cómo puedes ejercer tus derechos.</p>
+    </section>
+
+    <!-- Responsable -->
+    <section class="card" aria-label="Responsable">
+      <h2>2. Responsable del tratamiento</h2>
+      <p><strong>Astralis Network (Proyecto comunitario)</strong></p>
+      <p class="muted">Correo de contacto: <a href="mailto:astralisnetmc@gmail.com" style="color:#b180ff">astralisnetmc@gmail.com</a></p>
+    </section>
+
+    <!-- Datos recopilados -->
+    <section class="card" aria-label="Datos que recopilamos">
+      <h2>3. Datos que recopilamos</h2>
+      <p>Podemos recopilar y procesar las siguientes categorías de datos personales, según la interacción que tengas con nosotros:</p>
+      <ul>
+        <li><strong>Datos de identificación y contacto:</strong> correo electrónico, nombre si lo facilitas en formularios.</li>
+        <li><strong>Datos técnicos:</strong> dirección IP, identificadores temporales, logs del servidor, información del navegador.</li>
+        <li><strong>Datos de terceros:</strong> datos públicos de Discord (por ejemplo nombre público o presencia) usados únicamente para mostrar estadísticas públicas.</li>
+        <li><strong>Preferencias:</strong> selección del centro de cookies, idioma y otras preferencias que el usuario configure.</li>
+      </ul>
+    </section>
+
+    <!-- Finalidades y bases -->
+    <section class="card" aria-label="Finalidades y bases legales">
+      <h2>4. Finalidades y bases legales</h2>
+      <p>Tratamos tus datos por las siguientes razones:</p>
+      <ul>
+        <li><strong>Prestación del servicio y administración del servidor:</strong> gestión de estado del servidor, diagnóstico y seguridad — <em>ejecución de contrato / interés legítimo</em>.</li>
+        <li><strong>Comunicación y soporte:</strong> responder a consultas y soporte técnico — <em>ejecución de contrato / interés legítimo</em>.</li>
+        <li><strong>Cookies y analítica:</strong> medir y mejorar el sitio web — <em>consentimiento</em> cuando corresponda.</li>
+        <li><strong>Integraciones con terceros:</strong> uso de APIs públicas (Discord, mcsrvstat) para mostrar datos públicos — <em>interés legítimo</em>.</li>
+      </ul>
+    </section>
+
+    <!-- Terceros -->
+    <section class="card" aria-label="Terceros">
+      <h2>5. Terceros y transferencias</h2>
+      <p>Algunas operaciones implican la comunicación de datos con terceros proveedores, p. ej.:</p>
+      <ul>
+        <li><strong>Discord</strong> — widget/API (datos públicos y presencia).</li>
+        <li><strong>mcsrvstat.us</strong> — consulta del estado del servidor.</li>
+        <li><strong>Proveedor de consentimiento de cookies</strong> (TermsFeed o similar).</li>
+        <li><strong>Plataformas de pago</strong> (si aplica): PayPal, Stripe, etc. — Tratamiento según sus propias políticas.</li>
+      </ul>
+      <p class="muted">Cuando exista transferencia internacional, adoptaremos las garantías necesarias (cláusulas contractuales estándar u otras medidas adecuadas).</p>
+    </section>
+
+    <!-- Cookies -->
+    <section class="card" aria-label="Cookies">
+      <h2>6. Cookies y tecnologías similares</h2>
+      <p>Utilizamos cookies y tecnologías similares para ofrecer el servicio, recordar preferencias y medir uso anónimo. Las categorías usadas son:</p>
+      <ul>
+        <li><strong>Necesarias:</strong> esenciales para el funcionamiento del sitio (no requieren consentimiento).</li>
+        <li><strong>Preferencias:</strong> recordar idioma o configuración visual.</li>
+        <li><strong>Analítica:</strong> medir rendimiento (solo con consentimiento).</li>
+        <li><strong>Marketing:</strong> si otorgas consentimiento explícito.</li>
+      </ul>
+
+      <div class="actions">
+        <a href="#" id="open_preferences_center"><button class="btn">Actualiza las preferencias de cookies</button></a>
+
+        <button id="downloadPdf" class="btn">Descargar Política (PDF)</button>
+      </div>
+    </section>
+
+    <!-- Conservación -->
+    <section class="card" aria-label="Conservacion">
+      <h2>7. Conservación de los datos</h2>
+      <p>Conservamos los datos durante el tiempo necesario para cumplir las finalidades descritas y según obligaciones legales. Ejemplos:</p>
+      <ul>
+        <li>Logs de servidor: hasta 12 meses, salvo necesidad de seguridad.</li>
+        <li>Mensajes de soporte: hasta 24 meses.</li>
+        <li>Datos de compra: según obligaciones fiscales y contractuales aplicables.</li>
+      </ul>
+    </section>
+
+    <!-- Derechos -->
+    <section class="card" aria-label="Derechos">
+      <h2>8. Derechos del interesado</h2>
+      <p>Tienes derecho a solicitar:</p>
+      <ul>
+        <li>Acceso a tus datos.</li>
+        <li>Rectificación de datos inexactos.</li>
+        <li>Supresión (cuando proceda).</li>
+        <li>Limitación del tratamiento.</li>
+        <li>Portabilidad de tus datos.</li>
+        <li>Retirar el consentimiento y oponerte al tratamiento.</li>
+      </ul>
+      <p>Para ejercer estos derechos, escribe a <a href="mailto:astralisnetmc@gmail.com" style="color:#b180ff">astralisnetmc@gmail.com</a>. Responderemos dentro del plazo legal (generalmente 1 mes).</p>
+    </section>
+
+    <!-- Seguridad -->
+    <section class="card" aria-label="Seguridad">
+      <h2>9. Seguridad</h2>
+      <p>Hemos implementado medidas técnicas y organizativas para proteger tus datos frente a pérdida, alteración o acceso no autorizado. Sin embargo, ningún sistema es 100 % infalible; por ello te pedimos que nos comuniques cualquier incidente.</p>
+    </section>
+
+    <!-- Menores -->
+    <section class="card" aria-label="Menores">
+      <h2>10. Menores</h2>
+      <p>Nuestro servicio no está dirigido a menores de edad sin autorización de los padres o tutores. No solicitamos intencionadamente datos personales de menores; si descubrimos que se han facilitado, procederemos a su eliminación cuando sea procedente.</p>
+    </section>
+
+    <!-- Cambios -->
+    <section class="card" aria-label="Cambios">
+      <h2>11. Cambios en esta política</h2>
+      <p>Podemos actualizar esta Política. Publicaremos la fecha de “Última actualización” en la cabecera. Si los cambios son significativos, te lo comunicaremos por los canales disponibles.</p>
+    </section>
+
+    <!-- Contacto -->
+    <section class="card" aria-label="Contacto">
+      <h2>12. Contacto y reclamaciones</h2>
+      <p>Contacto: <a href="mailto:astralisnetmc@gmail.com" style="color:#b180ff">astralisnetmc@gmail.com</a></p>
+      <p class="muted">Si consideras que no hemos atendido tus derechos, puedes presentar una reclamación ante la autoridad de control competente (por ejemplo, la Agencia Española de Protección de Datos).</p>
+    </section>
+
+    <footer>
+      <p style="margin-top:8px">© 2025 Astralis Network (Proyecto comunitario)</p>
+    </footer>
+  </main>
+
+  <!-- Enlace opcional para volver al index -->
+  <a href="index.html" style="position:fixed; left:18px; bottom:18px; text-decoration:none;">
+    <button class="btn" style="padding:10px 14px; border-radius:10px;">⟵ Volver</button>
+  </a>
+
+  <!-- Cursor visual (sin ocultar cursor sistema por accesibilidad) -->
+  <div id="custom-cursor" aria-hidden="true"></div>
+
+  <!-- Scripts: estrellas, partículas, loader, cursor, open preferences, pdf download -->
+  <script>
+    // --- Stars canvas (copiado del index) ---
+    const starsCanvas = document.getElementById('stars');
+    const ctxStars = starsCanvas?.getContext?.('2d');
+    let stars = [];
+    function resizeStars() {
+      if(!starsCanvas) return;
+      starsCanvas.width = innerWidth; starsCanvas.height = innerHeight;
+      stars = Array(200).fill().map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,size:Math.random()*1.8,speed:0.2+Math.random()*0.5}));
+    }
+    function drawStars(){
+      if(!ctxStars) return;
+      ctxStars.clearRect(0,0,innerWidth,innerHeight);
+      ctxStars.fillStyle="#fff";
+      stars.forEach(s=>{ctxStars.globalAlpha=Math.random()*0.8+0.2;ctxStars.beginPath();ctxStars.arc(s.x,s.y,s.size,0,Math.PI*2);ctxStars.fill();s.y+=s.speed;if(s.y>innerHeight)s.y=0;});
+      requestAnimationFrame(drawStars);
+    }
+    resizeStars(); drawStars(); addEventListener('resize',resizeStars);
+
+    // --- Particles moradas (copiado del index) ---
+    const particlesCanvas = document.getElementById('particles');
+    const ctxP = particlesCanvas?.getContext?.('2d');
+    let particles = [];
+    function resizeParticles(){
+      if(!particlesCanvas) return;
+      particlesCanvas.width = innerWidth; particlesCanvas.height = innerHeight;
+      particles=Array(50).fill().map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:2+Math.random()*3,dx:(Math.random()-.5)*.3,dy:(Math.random()-.5)*.3}));
+    }
+    function drawParticles(){
+      if(!ctxP) return;
+      ctxP.clearRect(0,0,innerWidth,innerHeight);
+      ctxP.fillStyle="#b180ff";
+      particles.forEach(p=>{ctxP.globalAlpha=.5+Math.random()*.5;ctxP.beginPath();ctxP.arc(p.x,p.y,p.r,0,Math.PI*2);ctxP.fill();p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>innerWidth)p.dx*=-1;if(p.y<0||p.y>innerHeight)p.dy*=-1;});
+      requestAnimationFrame(drawParticles);
+    }
+    resizeParticles(); drawParticles(); addEventListener('resize',resizeParticles);
+
+    // --- Loader hide on load ---
+    window.addEventListener("load",()=>{ setTimeout(()=>{ const L=document.getElementById('loader'); if(L) L.classList.add('hidden'); }, 900); });
+
+    // --- Cursor visual (small, follows pointer) ---
+    (function initCursor(){
+      const cur = document.getElementById('custom-cursor');
+      if(!cur) return;
+      let mx=0,my=0,cx=0,cy=0;
+      document.addEventListener('mousemove', e=>{
+        mx=e.clientX; my=e.clientY;
+        cur.style.left = mx + 'px';
+        cur.style.top = my + 'px';
+      });
+      // small smoothing loop
+      function loop(){ requestAnimationFrame(loop); cx += (mx-cx)*0.25; cy += (my-cy)*0.25; cur.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`; }
+      loop();
+    })();
+
+    // --- Abrir centro de preferencias (usa el ID global si existe en el index.js del sitio) ---
+    document.getElementById('openPreferences')?.addEventListener('click', ()=>{
+      // Si el botón global existe en la página padre (si se abre desde index con mismo origin)
+      try {
+        const local = document.getElementById('open_preferences_center');
+        if(local) { local.click(); return; }
+        // intentar en parent/opener (solo si same-origin)
+        const openerEl = window.opener?.document?.getElementById('open_preferences_center') || window.parent?.document?.getElementById('open_preferences_center');
+        if(openerEl) { openerEl.click(); return; }
+      } catch(e){ /* cross-origin posible */ }
+      alert('Si estas en GitHub Pages, asegúrate de abrir la página principal y usar el botón de preferencias de cookies.'); 
+    });
+
+    // --- Descargar PDF: genera impresión con el contenido principal ---
+    document.getElementById('downloadPdf')?.addEventListener('click', ()=>{
+      const main = document.querySelector('main.container');
+      if(!main) { alert('Contenido no encontrado'); return; }
+      const w = window.open('', '_blank');
+      if(!w) { alert('Permite popups para descargar el PDF'); return; }
+      const css = `
+        body{font-family: "Courier New", monospace; padding:20px; color:#111; background:#fff;}
+        h1{color:#4b2bb0;}
+      `;
+      w.document.write('<html><head><title>Política de Privacidad — Astralis Network</title><style>'+css+'</style></head><body>');
+      w.document.write(main.innerText.replace(/\n\s+\n/g,'\n\n'));
+      w.document.write('</body></html>');
+      w.document.close();
+      w.focus();
+      w.print();
+    });
+
+    // --- Insertar fecha ---
+    document.getElementById('lastUpdated').textContent = '21 de octubre de 2025';
+  </script>
+  <!-- Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+<script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script>
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"dark","language":"es","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"Astralis Network"});
+});
+</script>
+
+<noscript>Herramienta de consentimiento de cookies gratuita de <a href="https://www.termsfeed.com/">TermsFeed</a></noscript>
+<!-- End Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+
+ <style>
+
+</style>
+
+</body>
+</html>
