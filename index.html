@@ -1,480 +1,1474 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="title" content="Astralis Network">
-  <meta name="description" content="Página web oficial del servidor Astralis Network. ¡Juega ya!">
-  <meta name="keywords" content="Minecraft, Astralis, AstralisMC, astralismc, minecraft, astralis, discord, network, astralis network, Astralis Network, servidor, server, itsgato">
-  <meta name="robots" content="index, follow">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="language" content="Spanish">
-  <meta name="og:title" content="Astralis Network">
-  <meta name="og:description" content="Network de Minecraft Java y Bedrock">
-  <link rel="icon" href="favicon.png" type="image/png">
-  <link rel="apple-touch-icon" href="favicon.png">
-  <title>Astralis Network | Web Oficial</title>
- <style>
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
-    font-family: "Courier New", monospace;
-  }
-  body {
-    background: radial-gradient(circle at top, #150b2e 0%, #080412 100%);
-    color: #fff; overflow-x: hidden;
-    display: flex; flex-direction: column; align-items: center;
-    text-align: center; position: relative;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Astralis Network">
+    <meta name="description" content="Página web oficial del servidor Astralis Network. ¡Juega ya!">
+    <meta name="keywords" content="Minecraft, Astralis, AstralisMC, astralismc, minecraft, astralis, discord, network, astralis network, Astralis Network, servidor, server, itsgato">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="Spanish">
+    <meta name="og:title" content="Astralis Network">
+    <meta name="og:description" content="Network de Minecraft Java y Bedrock">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <title>Astralis Network | Web Oficial</title>
 
-  /* --- Fondo --- */
-  canvas#stars, canvas#particles {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; z-index: -2;
-  }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
 
-  /* --- Loader --- */
-  #loader {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: radial-gradient(circle, #1a0b2a 0%, #080412 100%);
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; z-index: 9999; transition: opacity 1s ease;
-  }
-  #loader.hidden { opacity: 0; pointer-events: none; }
-  .spinner {
-    width: 70px; height: 70px;
-    border: 4px solid rgba(180, 100, 255, 0.3);
-    border-top-color: #b180ff;
-    border-radius: 50%; animation: spin 1s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+    <style>
+        /* ========================================================
+     TOKENS
+  ======================================================== */
+        :root {
+            --void: #05060f;
+            --void-2: #0b0e20;
+            --panel: #10142b;
+            --panel-line: rgba(140, 130, 255, 0.16);
+            --nebula: #8b6bff;
+            --nebula-dim: #5a48a8;
+            --cyan: #49e0c8;
+            --gold: #f4c15c;
+            --fog: #9ba0bf;
+            --white: #f3f2ff;
+            --danger: #ff5d7a;
 
-  #loader p { color: #b180ff; margin-top: 1rem; font-size: 1.1rem; }
+            --font-display: "Space Grotesk", sans-serif;
+            --font-pixel: "Press Start 2P", monospace;
+            --font-mono: "JetBrains Mono", monospace;
 
-  /* --- Banner Aviso --- */
-  .banner {
-    background: linear-gradient(90deg, #7a42f4, #b180ff);
-    color: white; padding: 1rem; text-align: center;
-    width: 100%; font-size: 1rem; letter-spacing: 1px;
-    animation: fadeIn 1.5s ease;
-  }
-  .banner.hidden { display: none; }
-
-  /* --- Bienvenida --- */
-  .welcome { margin-top: 6rem; max-width: 800px; padding: 2rem; animation: fadeIn 1.5s ease; }
-  .welcome h1 { font-size: 3rem; color: #c8a6ff; margin-bottom: 1rem; text-shadow: 0 0 20px #7a42f4; }
-  .welcome p { color: #ccc; }
-
-  /* --- Título Tienda --- */
-  .store-title { margin-top: 5rem; font-size: 2.2rem; color: #b180ff; text-shadow: 0 0 15px #7a42f4; }
-
-  /* --- Widget Estado Servidor --- */
-  .server-status {
-    margin-top: 2rem;
-    padding: 1.5rem 2rem;
-    background: rgba(20, 10, 40, 0.7);
-    border: 1px solid rgba(180, 100, 255, 0.2);
-    border-radius: 16px;
-    animation: fadeIn 1.8s ease;
-    max-width: 500px;
-  }
-  .server-status h3 {
-    font-size: 1.6rem;
-    background: linear-gradient(90deg, #a855f7, #6366f1, #9333ea);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 200%;
-    transition: background-position 0.6s ease;
-  }
-  .server-status h3:hover { background-position: right; }
-  .server-status p { color: #ccc; margin-top: 0.6rem; }
-  .status-online { color: #00ff99; }
-  .status-offline { color: #ff3366; }
-  .server-icon {
-    width: 64px; height: 64px; margin-top: 10px;
-    border-radius: 12px; box-shadow: 0 0 20px rgba(150,80,255,0.5);
-  }
-
-  /* --- Categorías --- */
-  .categories {
-    display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 2rem; margin-top: 3rem; animation: fadeIn 2s ease;
-  }
-  .category {
-    background: rgba(20, 10, 40, 0.8);
-    border: 2px solid rgba(120, 60, 255, 0.3);
-    border-radius: 16px; width: 260px; padding: 2rem;
-    transition: all 0.4s ease; cursor: pointer; position: relative;
-  }
-  .category:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 0 25px rgba(150, 80, 255, 0.3);
-    border-color: #a66bff;
-  }
-  .category h3 { color: #b180ff; margin-bottom: 1rem; font-size: 1.4rem; }
-
-  /* --- Botones Globales (para TODO el sitio) --- */
-  button {
-    background: transparent;
-    color: white;
-    border: 2px solid #7a42f4;
-    border-radius: 8px;
-    padding: 0.6rem 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-  }
-  button:hover {
-    background: #7a42f4;
-    border-color: #b180ff;
-    box-shadow: 0 0 10px #7a42f4;
-  }
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background: rgba(122, 66, 244, 0.2);
-    border: 2px solid rgba(122, 66, 244, 0.3);
-    box-shadow: none;
-  }
-
-  /* --- Noticias --- */
-  .news {
-    margin-top: 6rem; max-width: 900px; padding: 2rem;
-    background: rgba(20, 10, 40, 0.7);
-    border: 1px solid rgba(180, 100, 255, 0.2);
-    border-radius: 16px; animation: fadeIn 2.2s ease;
-  }
-  .news h2 { color: #b180ff; margin-bottom: 1rem; }
-  .news-item {
-    text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding: 1rem 0;
-  }
-  .news-item:last-child { border: none; }
-  .news-item h3 { color: #c8a6ff; margin-bottom: 0.4rem; }
-  .news-item p { color: #ccc; font-size: 0.95rem; }
-
-  /* --- Aviso Padres --- */
-  .parents {
-    margin-top: 5rem; max-width: 900px;
-    background: rgba(25, 15, 45, 0.6);
-    border: 1px solid rgba(120, 60, 255, 0.3);
-    border-radius: 12px; padding: 2rem; color: #ddd;
-    animation: fadeIn 2.5s ease;
-  }
-  .parents h2 { color: #b180ff; margin-bottom: 1rem; }
-
-  /* --- Contacto --- */
-  .contact {
-    display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 2rem; margin: 5rem 0; animation: fadeIn 2.8s ease;
-  }
-  .contact-box {
-    background: rgba(20, 10, 40, 0.8);
-    border: 1px solid rgba(180, 100, 255, 0.2);
-    border-radius: 12px; padding: 1.5rem 2rem;
-    width: 280px; transition: 0.3s;
-  }
-  .contact-box:hover { border-color: #b180ff; box-shadow: 0 0 20px rgba(180, 100, 255, 0.3); }
-  .contact-box h3 { color: #b180ff; margin-bottom: 0.8rem; }
-  .contact-box p { color: #ccc; margin-bottom: 1rem; }
-
-  /* --- Footer --- */
-  footer {
-    margin-bottom: 2rem; color: #888; font-size: 0.9rem;
-    animation: fadeIn 3s ease;
-  }
-
-  /* --- Botón subir arriba --- */
-  #scrollTopBtn {
-    position: fixed; bottom: 20px; right: 20px;
-    background: #7a42f4; border: none;
-    color: white; border-radius: 50%;
-    width: 45px; height: 45px; font-size: 1.5rem;
-    cursor: pointer; display: none; transition: 0.3s;
-    box-shadow: 0 0 15px rgba(180, 100, 255, 0.3);
-  }
-  #scrollTopBtn:hover { background: #b180ff; box-shadow: 0 0 20px #b180ff; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
-
-</head>
-<body>
-  <div id="loader">
-    <div class="spinner"></div>
-    <p>Cargando la galaxia...</p>
-  </div>
-
-  <canvas id="stars"></canvas>
-  <canvas id="particles"></canvas>
-
-  <!-- 🔔 Banner -->
-  <div class="banner" onclick="window.location.href='https://astralismc.tip4serv.com/'">¡Hemos abierto una nueva tienda! <button>¡Verla!</button></div>
-
-  <section class="welcome">
-    <h1>🌌 Bienvenido a Astralis Network 🌌</h1>
-    <p>Tu aventura estelar comienza aquí. Somos un pequeño servidor de Minecraft con la modalidad de survival y otras en desarrollo. Explora nuestra tienda galáctica con rangos, dinero y objetos únicos para tu aventura.</p>
-  </section>
-
-  <!-- 🌌 Widget Estado del Servidor -->
-  <div class="server-status">
-    <h3>Estado del Servidor</h3>
-    <p id="status">Comprobando estado...</p>
-    <p id="players"></p>
-  </div>
-
-<!-- 🪐 Estado del servidor de Discord con spinner -->
-<section id="discord-status" class="discord-status" style="animation:fadeIn 2s ease;margin-top:3rem;">
-  <h2 style="color:#b180ff;text-shadow:0 0 15px #7a42f4;">💬 Discord Astralis Network</h2>
-  <div id="discord-loader" class="discord-loader" style="margin-top:1rem;">
-    <div class="spinner-small"></div>
-    <p style="color:#ccc;margin-top:0.5rem;">🌌 Contactando con nuestro satélite...</p>
-  </div>
-  <p id="discord-online" style="color:#ccc;margin-top:0.5rem; display:none;"></p>
-</section>
-
-<script>
-  const discordLoader = document.getElementById("discord-loader");
-  const discordOnline = document.getElementById("discord-online");
-
-  async function loadDiscordStatus() {
-    try {
-      // Mostrar loader
-      discordLoader.style.display = "flex";
-      discordOnline.style.display = "none";
-
-      const res = await fetch("https://discord.com/api/guilds/1151500409144365056/widget.json"); // 👈 Reemplaza TU_ID con tu servidor
-      const data = await res.json();
-
-      // Pequeña espera para que se vea el loader
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      // Ocultar loader y mostrar número de usuarios
-      discordLoader.style.display = "none";
-      discordOnline.textContent = `👥 Usuarios conectados: ${data.presence_count}`;
-      discordOnline.style.display = "block";
-      discordOnline.style.animation = 'fadeIn 1s ease';
-
-    } catch (error) {
-      discordLoader.style.display = "none";
-      discordOnline.textContent = "❌ Error al contactar con el satélite de Discord.";
-      discordOnline.style.display = "block";
-      console.error("Error cargando Discord status:", error);
-    }
-  }
-
-  loadDiscordStatus();
-  setInterval(loadDiscordStatus, 30000); // Actualiza cada 30 segundos
-</script>
-
-<style>
-  /* --- Bloque de Discord --- */
-  .discord-status {
-    background: rgba(20, 10, 40, 0.75);
-    border: 1px solid rgba(180, 100, 255, 0.2);
-    border-radius: 16px;
-    padding: 2rem;
-    max-width: 400px;
-    margin: 2rem auto;
-    box-shadow: 0 0 25px rgba(150, 80, 255, 0.25);
-    transition: all 0.3s ease;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .discord-status:hover {
-    box-shadow: 0 0 35px rgba(180, 100, 255, 0.35);
-    transform: translateY(-4px);
-  }
-
-  /* --- Loader interno --- */
-  .discord-loader {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .spinner-small {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(180, 100, 255, 0.3);
-    border-top-color: #b180ff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* --- Animación fadeIn --- */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
-
-  <h2 class="store-title"><a href="https://astralismc.tip4serv.com/" style="color:#b180ff">🛒 Comprar en la tienda oficial</a></h2>
-
-  <section class="categories">
-    <div class="category" onclick="window.location.href='https://astralismc.tip4serv.com/#tab_1'">
-      <h3>🛡️ Rangos</h3><button>Ver Rangos</button>
-    </div>
-    <div class="category" onclick="window.location.href='#'">
-      <h3>💰 Dinero</h3><button disabled>Dinero no disponible (todavía)</button>
-    </div>
-    <div class="category" onclick="window.location.href='#'">
-      <h3>⚙️ Generadores</h3><button disabled>Generadores no disponibles (todavía)</button>
-    </div>
-    <div class="category" onclick="window.location.href='https://astralismc.tip4serv.com/#tab_4'">
-      <h3>💎 Piedras</h3><button>Ver Piedras</button>
-    </div>
-  </section>
-
-  <!-- 🔧 Script Estado Servidor -->
-  <script>
-    const SERVER_ADDRESS = "astralismc.xyz";
-
-    async function checkServer() {
-      try {
-        const response = await fetch(`https://api.mcsrvstat.us/3/${SERVER_ADDRESS}`);
-        const data = await response.json();
-
-        const statusEl = document.getElementById("status");
-        const playersEl = document.getElementById("players");
-        const iconEl = document.getElementById("icon");
-
-        if (data.online) {
-          statusEl.innerHTML = "🟢 <span class='status-online'>Servidor ONLINE</span>";
-          playersEl.innerHTML = `👥 Jugadores conectados: <span style='color:#b180ff;'>${data.players.online} / ${data.players.max}</span>`;
-          if (data.icon) {
-            iconEl.src = data.icon;
-            iconEl.style.display = "block";
-          } else iconEl.style.display = "none";
-        } else {
-          statusEl.innerHTML = "🔴 <span class='status-offline'>Servidor OFFLINE</span>";
-          playersEl.innerHTML = "";
-          iconEl.style.display = "none";
+            --radius: 14px;
+            --edge: 1px solid var(--panel-line);
         }
-      } catch (e) {
-        console.error("Error al obtener estado del servidor:", e);
-      }
-    }
 
-    checkServer();
-    setInterval(checkServer, 30000);
-  </script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <section class="news">
-    <h2>📰 Noticias del Servidor</h2>
-    <div class="news-item">
-      <h3>✨ Nueva página web</h3>
-      <p>Hemos lanzado una nueva página web en BETA</p>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--void);
+            color: var(--white);
+            font-family: var(--font-display);
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        ::selection {
+            background: var(--nebula);
+            color: var(--white);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--cyan);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* ========================================================
+     BACKDROP (stars + nebula fog)
+  ======================================================== */
+        canvas#stars {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+        }
+
+        .nebula-fog {
+            position: fixed;
+            inset: -10%;
+            z-index: -2;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 40% 30% at 15% 20%, rgba(139, 107, 255, 0.20), transparent 60%),
+                radial-gradient(ellipse 35% 30% at 85% 15%, rgba(73, 224, 200, 0.14), transparent 60%),
+                radial-gradient(ellipse 50% 40% at 50% 90%, rgba(139, 107, 255, 0.14), transparent 60%);
+            filter: blur(10px);
+            animation: fog-drift 40s ease-in-out infinite alternate;
+        }
+
+        @keyframes fog-drift {
+            from {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            to {
+                transform: translate3d(-2%, 2%, 0) scale(1.05);
+            }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ========================================================
+     LOADER
+  ======================================================== */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--void);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            transition: opacity .6s ease, visibility .6s ease;
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-cube {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--nebula), var(--cyan));
+            border-radius: 6px;
+            animation: loader-spin 1.1s ease-in-out infinite;
+        }
+
+        @keyframes loader-spin {
+
+            0%,
+            100% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(0.75);
+            }
+        }
+
+        #loader p {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: var(--fog);
+            text-transform: uppercase;
+        }
+
+        /* ========================================================
+     TOP BAR
+  ======================================================== */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem clamp(1.2rem, 4vw, 3rem);
+            background: rgba(5, 6, 15, 0.75);
+            backdrop-filter: blur(14px);
+            border-bottom: var(--edge);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--font-pixel);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .brand .mark {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            background: linear-gradient(135deg, var(--nebula), var(--cyan));
+            box-shadow: 0 0 14px rgba(139, 107, 255, 0.6);
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.92rem;
+            color: var(--fog);
+        }
+
+        .nav-links a {
+            transition: color .25s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -6px;
+            height: 1px;
+            background: var(--cyan);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .25s ease;
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #nav-toggle {
+            display: none;
+        }
+
+        /* ========================================================
+     BUTTONS
+  ======================================================== */
+        .btn {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+            color: var(--white);
+            background: transparent;
+            border: 1px solid var(--nebula);
+            border-radius: 8px;
+            padding: 0.65rem 1.3rem;
+            cursor: pointer;
+            transition: all .25s ease;
+        }
+
+        .btn:hover {
+            background: var(--nebula);
+            box-shadow: 0 0 18px rgba(139, 107, 255, 0.55);
+            transform: translateY(-1px);
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, var(--nebula), #6f5ae0);
+            border-color: transparent;
+        }
+
+        .btn.primary:hover {
+            box-shadow: 0 0 22px rgba(139, 107, 255, 0.7);
+        }
+
+        .btn.ghost {
+            border-color: var(--panel-line);
+            color: var(--fog);
+        }
+
+        .btn.ghost:hover {
+            background: rgba(139, 107, 255, 0.12);
+            color: var(--white);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: transparent;
+            border-color: var(--panel-line);
+            box-shadow: none;
+            transform: none;
+            color: var(--fog);
+        }
+
+        .btn.small {
+            padding: 0.45rem 0.9rem;
+            font-size: 0.78rem;
+        }
+
+        /* ========================================================
+     ANNOUNCEMENT STRIP
+  ======================================================== */
+        .announce {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            text-align: center;
+            padding: 0.7rem 1.2rem;
+            background: linear-gradient(90deg, rgba(139, 107, 255, 0.18), rgba(73, 224, 200, 0.14));
+            border-bottom: var(--edge);
+            font-size: 0.85rem;
+            color: var(--white);
+            font-family: var(--font-mono);
+        }
+
+        .announce b {
+            color: var(--gold);
+        }
+
+        /* ========================================================
+     LAYOUT HELPERS
+  ======================================================== */
+        section {
+            padding: clamp(3.5rem, 8vw, 6rem) clamp(1.2rem, 4vw, 3rem);
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--cyan);
+            margin-bottom: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 22px;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        h2.section-title {
+            font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+
+        .section-sub {
+            color: var(--fog);
+            max-width: 56ch;
+            line-height: 1.6;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ========================================================
+     HERO
+  ======================================================== */
+        .hero {
+            min-height: 92vh;
+            display: flex;
+            align-items: center;
+            padding-top: clamp(3rem, 6vw, 4rem);
+            max-width: 1280px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 3rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.6rem, 6vw, 4.4rem);
+            line-height: 1.04;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 .accent {
+            background: linear-gradient(120deg, var(--nebula), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p.lede {
+            margin-top: 1.3rem;
+            color: var(--fog);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            max-width: 48ch;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .ip-widget {
+            margin-top: 2.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.9rem;
+            background: rgba(16, 20, 43, 0.7);
+            border: var(--edge);
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            font-family: var(--font-mono);
+        }
+
+        .ip-widget .tag {
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            color: var(--fog);
+            text-transform: uppercase;
+        }
+
+        .ip-widget .value {
+            font-size: 0.95rem;
+            color: var(--white);
+        }
+
+        /* voxel scene */
+        .voxel-scene {
+            position: relative;
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 900px;
+        }
+
+        .voxel {
+            position: absolute;
+            width: 86px;
+            height: 86px;
+            transform-style: preserve-3d;
+            animation: voxel-float 6s ease-in-out infinite;
+        }
+
+        .voxel .f {
+            position: absolute;
+            width: 86px;
+            height: 86px;
+        }
+
+        .voxel .top {
+            background: linear-gradient(135deg, var(--cyan), #2fa08e);
+            transform: rotateX(90deg) translateZ(43px);
+        }
+
+        .voxel .front {
+            background: linear-gradient(135deg, var(--nebula), #5c46c2);
+            transform: translateZ(43px);
+        }
+
+        .voxel .side {
+            background: linear-gradient(135deg, #4a3aa0, #382b7a);
+            transform: rotateY(90deg) translateZ(43px);
+        }
+
+        .voxel.v1 {
+            left: 8%;
+            top: 8%;
+            animation-delay: 0s;
+            transform: rotateX(-24deg) rotateY(38deg);
+        }
+
+        .voxel.v2 {
+            right: 6%;
+            top: 38%;
+            width: 56px;
+            height: 56px;
+            animation-delay: 1.4s;
+            transform: rotateX(-18deg) rotateY(-30deg);
+        }
+
+        .voxel.v2 .f {
+            width: 56px;
+            height: 56px;
+        }
+
+        .voxel.v2 .top {
+            transform: rotateX(90deg) translateZ(28px);
+        }
+
+        .voxel.v2 .front {
+            transform: translateZ(28px);
+            background: linear-gradient(135deg, var(--gold), #c98f2c);
+        }
+
+        .voxel.v2 .side {
+            transform: rotateY(90deg) translateZ(28px);
+            background: linear-gradient(135deg, #a97a2a, #8a611f);
+        }
+
+        .voxel.v3 {
+            left: 26%;
+            bottom: 2%;
+            width: 44px;
+            height: 44px;
+            animation-delay: 2.6s;
+            transform: rotateX(-20deg) rotateY(50deg);
+        }
+
+        .voxel.v3 .f {
+            width: 44px;
+            height: 44px;
+        }
+
+        .voxel.v3 .top {
+            transform: rotateX(90deg) translateZ(22px);
+        }
+
+        .voxel.v3 .front {
+            transform: translateZ(22px);
+        }
+
+        .voxel.v3 .side {
+            transform: rotateY(90deg) translateZ(22px);
+        }
+
+        @keyframes voxel-float {
+
+            0%,
+            100% {
+                translate: 0 0;
+            }
+
+            50% {
+                translate: 0 -18px;
+            }
+        }
+
+        .voxel-ring {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 1px dashed rgba(139, 107, 255, 0.25);
+            animation: ring-spin 30s linear infinite;
+        }
+
+        @keyframes ring-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ========================================================
+     TELEMETRY CONSOLE (signature element)
+  ======================================================== */
+        .console-wrap {
+            position: relative;
+        }
+
+        .console {
+            position: relative;
+            background: linear-gradient(180deg, rgba(16, 20, 43, 0.9), rgba(11, 14, 32, 0.9));
+            border: var(--edge);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .console::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 3px);
+            mix-blend-mode: overlay;
+        }
+
+        .console-cell {
+            padding: 1.8rem 1.9rem;
+            position: relative;
+        }
+
+        .console-cell+.console-cell {
+            border-left: var(--edge);
+        }
+
+        .console-head {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--fog);
+            margin-bottom: 1.1rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--fog);
+            flex-shrink: 0;
+        }
+
+        .dot.online {
+            background: var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+
+        .dot.offline {
+            background: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
+        }
+
+        .dot.pending {
+            background: var(--gold);
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.35;
+            }
+        }
+
+        .readout {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .readout-sub {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--fog);
+            margin-top: 0.4rem;
+        }
+
+        .server-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            margin-top: 0.9rem;
+            box-shadow: 0 0 16px rgba(139, 107, 255, 0.4);
+        }
+
+        .corner {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-color: var(--nebula-dim);
+            opacity: 0.6;
+        }
+
+        .corner.tl {
+            top: 8px;
+            left: 8px;
+            border-top: 1px solid;
+            border-left: 1px solid;
+        }
+
+        .corner.tr {
+            top: 8px;
+            right: 8px;
+            border-top: 1px solid;
+            border-right: 1px solid;
+        }
+
+        .corner.bl {
+            bottom: 8px;
+            left: 8px;
+            border-bottom: 1px solid;
+            border-left: 1px solid;
+        }
+
+        .corner.br {
+            bottom: 8px;
+            right: 8px;
+            border-bottom: 1px solid;
+            border-right: 1px solid;
+        }
+
+        @media (max-width: 640px) {
+            .console {
+                grid-template-columns: 1fr;
+            }
+
+            .console-cell+.console-cell {
+                border-left: none;
+                border-top: var(--edge);
+            }
+        }
+
+        /* ========================================================
+     STORE / CATEGORIES
+  ======================================================== */
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2.4rem;
+        }
+
+        .store-card {
+            background: var(--panel);
+            border: var(--edge);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            cursor: pointer;
+            transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .store-card:not(.disabled):hover {
+            transform: translateY(-6px);
+            border-color: var(--nebula);
+            box-shadow: 0 14px 34px rgba(139, 107, 255, 0.18);
+        }
+
+        .store-card .icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: rgba(139, 107, 255, 0.14);
+            border: 1px solid rgba(139, 107, 255, 0.3);
+        }
+
+        .store-card h3 {
+            font-size: 1.15rem;
+        }
+
+        .store-card p {
+            color: var(--fog);
+            font-size: 0.88rem;
+            line-height: 1.55;
+            flex-grow: 1;
+        }
+
+        .store-card.disabled {
+            opacity: 0.55;
+        }
+
+        .store-card.disabled .icon {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--panel-line);
+        }
+
+        /* ========================================================
+     NEWS / LOG
+  ======================================================== */
+        .log {
+            margin-top: 2.2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .log-entry {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-top: var(--edge);
+        }
+
+        .log-entry:last-child {
+            border-bottom: var(--edge);
+        }
+
+        .log-date {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--cyan);
+            letter-spacing: 1px;
+        }
+
+        .log-entry h3 {
+            font-size: 1.05rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .log-entry p {
+            color: var(--fog);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width:560px) {
+            .log-entry {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+        }
+
+        /* ========================================================
+     PARENTS NOTICE (accordion)
+  ======================================================== */
+        .notice {
+            margin-top: 1.5rem;
+            background: var(--panel);
+            border: 1px solid rgba(244, 193, 92, 0.25);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .notice-head {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.3rem 1.6rem;
+            background: rgba(244, 193, 92, 0.06);
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            color: var(--white);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .notice-head .chev {
+            transition: transform .3s ease;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .notice.open .notice-head .chev {
+            transform: rotate(180deg);
+        }
+
+        .notice-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .4s ease;
+        }
+
+        .notice.open .notice-body {
+            max-height: 1400px;
+        }
+
+        .notice-body-inner {
+            padding: 0.3rem 1.6rem 1.8rem;
+            color: var(--fog);
+            font-size: 0.94rem;
+            line-height: 1.75;
+        }
+
+        .notice-body-inner strong {
+            color: var(--white);
+        }
+
+        .notice-body-inner .risk {
+            margin-top: 1rem;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            background: rgba(255, 93, 122, 0.08);
+            border: 1px solid rgba(255, 93, 122, 0.25);
+        }
+
+        .notice-body-inner ol {
+            margin: 0.6rem 0 0 1.2rem;
+        }
+
+        .notice-body-inner li {
+            margin-bottom: 0.3rem;
+        }
+
+        /* ========================================================
+     CONTACT
+  ======================================================== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2.2rem;
+        }
+
+        .contact-card {
+            background: var(--panel);
+            border: var(--edge);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            transition: border-color .3s ease, transform .3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: var(--nebula);
+            transform: translateY(-4px);
+        }
+
+        .contact-card .icon {
+            font-size: 1.4rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .contact-card h3 {
+            margin-bottom: 0.4rem;
+            font-size: 1.05rem;
+        }
+
+        .contact-card p {
+            color: var(--fog);
+            font-size: 0.9rem;
+            margin-bottom: 1.1rem;
+        }
+
+        /* ========================================================
+     FOOTER
+  ======================================================== */
+        footer {
+            border-top: var(--edge);
+            padding: 2.2rem clamp(1.2rem, 4vw, 3rem) 3rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .footer-note {
+            color: var(--fog);
+            font-size: 0.82rem;
+            font-family: var(--font-mono);
+        }
+
+        .gdpr-badge {
+            height: 34px;
+            width: auto;
+            opacity: 0.8;
+            transition: opacity .3s;
+        }
+
+        .gdpr-badge:hover {
+            opacity: 1;
+        }
+
+        /* ========================================================
+     SCROLL TOP
+  ======================================================== */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 400;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--panel);
+            border: var(--edge);
+            color: var(--white);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all .25s ease;
+        }
+
+        #scrollTopBtn:hover {
+            border-color: var(--nebula);
+            box-shadow: 0 0 16px rgba(139, 107, 255, 0.4);
+        }
+
+        /* ========================================================
+     RESPONSIVE NAV
+  ======================================================== */
+        @media (max-width: 860px) {
+            .nav-links {
+                position: fixed;
+                inset: 60px 0 auto 0;
+                z-index: 400;
+                flex-direction: column;
+                gap: 0;
+                background: rgba(6, 8, 18, 0.98);
+                border-bottom: var(--edge);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height .35s ease;
+            }
+
+            #nav-toggle:checked~.nav-links {
+                max-height: 400px;
+            }
+
+            .nav-links a {
+                padding: 1rem 1.6rem;
+                border-top: var(--edge);
+            }
+
+            .nav-toggle-btn {
+                display: flex;
+                width: 38px;
+                height: 38px;
+                border-radius: 8px;
+                border: var(--edge);
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                background: transparent;
+            }
+
+            .nav-toggle-btn span,
+            .nav-toggle-btn span::before,
+            .nav-toggle-btn span::after {
+                content: "";
+                display: block;
+                width: 16px;
+                height: 1.5px;
+                background: var(--white);
+                position: relative;
+            }
+
+            .nav-toggle-btn span::before {
+                position: absolute;
+                top: -5px;
+            }
+
+            .nav-toggle-btn span::after {
+                position: absolute;
+                top: 5px;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: left;
+            }
+
+            .voxel-scene {
+                height: 260px;
+                margin-top: 1rem;
+            }
+        }
+
+        @media (min-width:861px) {
+            .nav-toggle-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loader">
+        <div class="loader-cube"></div>
+        <p>Cargando la galaxia…</p>
     </div>
-    <div class="news-item">
-      <h3>🚀 Nueva tienda</h3>
-      <p>También hemos abierto una nueva tienda.</p>
+
+    <canvas id="stars"></canvas>
+    <div class="nebula-fog"></div>
+    <div class="grain"></div>
+
+    <header class="topbar">
+        <a href="#top" class="brand"><span class="mark"></span>ASTRALIS</a>
+        <input type="checkbox" id="nav-toggle">
+        <nav class="nav-links">
+            <a href="#estado">Estado</a>
+            <a href="#tienda">Tienda</a>
+            <a href="#noticias">Noticias</a>
+            <a href="#padres">Para padres</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+        <div class="nav-cta">
+            <a href="https://discord.gg/d3z7V4vG6x" target="_blank" class="btn small ghost">Discord</a>
+            <label for="nav-toggle" class="nav-toggle-btn" aria-label="Abrir menú"><span></span></label>
+        </div>
+    </header>
+
+    <div class="announce" onclick="window.location.href='https://astralismc.tip4serv.com/'">
+        🛒 Hemos abierto una <b>nueva tienda</b> — rangos, piedras y más objetos para tu aventura estelar.
+        <button class="btn small">Verla</button>
     </div>
-  </section>
 
-  <section class="parents">
-    <h2>🧾 Aviso para Padres</h2>
-    <p>
-      <strong>🔒 Aviso Importante para Padres</strong><br>
-      <strong>Transparencia sobre Compras en Astralis Network</strong><br>
-      Las compras (rangos, kits, etc.) en nuestro servidor son <strong>donaciones opcionales</strong> que nos ayudan a mantener el servidor operativo.<br>
-      <br>
-      <strong>Funcionamiento Básico:</strong><br>
-      1. El jugador selecciona un beneficio <strong>no esencial</strong> que mejora su experiencia de juego.<br>
-      2. El pago se procesa de forma segura a través de plataformas como PayPal o tarjeta de crédito.<br>
-      3. El beneficio virtual se activa en el juego.<br>
-      <br>
-      <strong>⚠️ Advertencia de Riesgos (¡Por favor, lea!)</strong><br>
-      - <strong>Riesgo de Gasto:</strong> <strong>NUNCA comparta datos de pago con sus hijos.</strong> Recomendamos encarecidamente desactivar o limitar las compras en la aplicación (in-app) para evitar cargos no autorizados.<br>
-      - <strong>No Reembolsables:</strong> Todos los artículos son virtuales y las compras se consideran donaciones. <strong>No se ofrecen reembolsos</strong> si la cuenta es sancionada o el jugador deja de jugar.<br>
-      - <strong>Seguridad:</strong> Hable con su hijo sobre la <strong>seguridad en línea</strong> (no compartir información personal) y recuérdele reportar cualquier acoso o comportamiento inapropiado a nuestro equipo.<br>
-      <br>
-      Al realizar una compra, usted confirma ser el titular de la cuenta de pago y acepta nuestros términos.<br>
-      <br>
-      <strong>Para una explicación completa de los riesgos, el proceso de compra y las reglas del servidor, haga clic aquí:
-      <a href="mailto:astralisnetmc@gmail.com" style="color: white; text-decoration: none;">Envíanos un correo.</a>
-    </strong>
-    </p>
-  </section>
+    <main id="top">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="reveal in">
+                    <div class="eyebrow">Servidor de Minecraft · Java &amp; Bedrock</div>
+                    <h1>Tu aventura <span class="accent">estelar</span> empieza aquí.</h1>
+                    <p class="lede">Astralis Network es un servidor en crecimiento centrado en survival, con más modos en camino. Explora, construye y hazte con rangos y objetos únicos en nuestra tienda galáctica.</p>
+                    <div class="hero-actions">
+                        <a href="https://astralismc.tip4serv.com/" class="btn primary">Ir a la tienda</a>
+                        <a href="#estado" class="btn ghost">Ver estado del servidor</a>
+                    </div>
+                    <div class="ip-widget">
+                        <span class="tag">IP del servidor</span>
+                        <span class="value" id="server-ip">Próximamente</span>
+                    </div>
+                </div>
+                <div class="voxel-scene" aria-hidden="true">
+                    <div class="voxel-ring"></div>
+                    <div class="voxel v1">
+                        <div class="f top"></div>
+                        <div class="f front"></div>
+                        <div class="f side"></div>
+                    </div>
+                    <div class="voxel v2">
+                        <div class="f top"></div>
+                        <div class="f front"></div>
+                        <div class="f side"></div>
+                    </div>
+                    <div class="voxel v3">
+                        <div class="f top"></div>
+                        <div class="f front"></div>
+                        <div class="f side"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <section class="contact">
-    <div class="contact-box">
-      <h3>📧 Correo</h3>
-      <p>astralisnetmc@gmail.com</p>
-      <button onclick="navigator.clipboard.writeText('astralisnetmc@gmail.com'); this.innerText='¡Copiado!'; setTimeout(()=>this.innerText='Copiar Email',2000);">Copiar Email</button>
-    </div>
-    <div class="contact-box">
-      <h3>🌐 Discord</h3>
-      <p>Únete a nuestra comunidad</p>
-      <button onclick="window.open('https://discord.gg/d3z7V4vG6x','_blank')">Unirse</button>
-    </div>
-    <div class="contact-box">
-      <h3>🎮 Servidor</h3>
-      <p>IP: pronto disponible</p>
-      <button disabled>Próximamente</button>
-    </div>
-  </section>
+        <!-- TELEMETRY / ESTADO -->
+        <section id="estado" class="reveal">
+            <div class="eyebrow">En vivo</div>
+            <h2 class="section-title">Panel de transmisión</h2>
+            <p class="section-sub">Estado del servidor y de nuestra comunidad de Discord, actualizado cada 30 segundos.</p>
 
-  <footer>© 2025 Astralis Network — Todos los derechos reservados.</footer>
-  <button id="scrollTopBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">⬆</button>
+            <div class="console-wrap" style="margin-top:2rem;">
+                <div class="console">
+                    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
 
-  <script>
-    // Fondo estrellado
-    const starsCanvas = document.getElementById('stars');
-    const ctxStars = starsCanvas.getContext('2d');
-    let stars = [];
-    function resizeStars() {
-      starsCanvas.width = innerWidth; starsCanvas.height = innerHeight;
-      stars = Array(200).fill().map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,size:Math.random()*1.8,speed:0.2+Math.random()*0.5}));
-    }
-    function drawStars() {
-      ctxStars.clearRect(0,0,innerWidth,innerHeight);
-      ctxStars.fillStyle="#fff";
-      stars.forEach(s=>{ctxStars.globalAlpha=Math.random()*0.8+0.2;ctxStars.beginPath();ctxStars.arc(s.x,s.y,s.size,0,Math.PI*2);ctxStars.fill();s.y+=s.speed;if(s.y>innerHeight)s.y=0;});
-      requestAnimationFrame(drawStars);
-    }
-    resizeStars(); drawStars(); addEventListener('resize',resizeStars);
+                    <div class="console-cell">
+                        <div class="console-head"><span class="dot pending" id="srv-dot"></span>Estado del servidor</div>
+                        <div class="readout" id="srv-status">Comprobando...</div>
+                        <div class="readout-sub" id="srv-players"></div>
+                        <img id="srv-icon" class="server-icon" alt="" style="display:none;">
+                    </div>
 
-    // Partículas moradas
-    const particlesCanvas=document.getElementById('particles');
-    const ctxP=particlesCanvas.getContext('2d');
-    let particles=[];
-    function resizeParticles(){
-      particlesCanvas.width=innerWidth;particlesCanvas.height=innerHeight;
-      particles=Array(50).fill().map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:2+Math.random()*3,dx:(Math.random()-.5)*.3,dy:(Math.random()-.5)*.3}));
-    }
-    function drawParticles(){
-      ctxP.clearRect(0,0,innerWidth,innerHeight);
-      ctxP.fillStyle="#b180ff";
-      particles.forEach(p=>{ctxP.globalAlpha=.5+Math.random()*.5;ctxP.beginPath();ctxP.arc(p.x,p.y,p.r,0,Math.PI*2);ctxP.fill();p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>innerWidth)p.dx*=-1;if(p.y<0||p.y>innerHeight)p.dy*=-1;});
-      requestAnimationFrame(drawParticles);
-    }
-    resizeParticles(); drawParticles(); addEventListener('resize',resizeParticles);
+                    <div class="console-cell">
+                        <div class="console-head"><span class="dot pending" id="dc-dot"></span>Comunidad de Discord</div>
+                        <div class="readout" id="dc-status">Contactando…</div>
+                        <div class="readout-sub">Miembros conectados ahora mismo</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    // Loader
-    window.addEventListener("load",()=>{setTimeout(()=>document.getElementById("loader").classList.add("hidden"),1200);});
+        <!-- TIENDA -->
+        <section id="tienda" class="reveal">
+            <div class="eyebrow">Tienda oficial</div>
+            <h2 class="section-title">Equípate para el viaje</h2>
+            <p class="section-sub">Todo lo que compras aquí es una donación opcional que mantiene Astralis en línea. Nada de esto es necesario para jugar.</p>
 
-    // Botón subir arriba
-    const btn=document.getElementById("scrollTopBtn");
-    window.onscroll=()=>{btn.style.display=(window.scrollY>400)?"block":"none";};
-  </script>
+            <div class="store-grid">
+                <div class="store-card" onclick="window.location.href='https://astralismc.tip4serv.com/#tab_1'">
+                    <div class="icon">🛡️</div>
+                    <h3>Rangos</h3>
+                    <p>Beneficios cosméticos y de comodidad que mejoran tu experiencia de juego.</p>
+                    <button class="btn small">Ver rangos</button>
+                </div>
+                <div class="store-card disabled">
+                    <div class="icon">💰</div>
+                    <h3>Dinero</h3>
+                    <p>Todavía no disponible. Estamos preparando el equilibrio económico del servidor.</p>
+                    <button class="btn small" disabled>Próximamente</button>
+                </div>
+                <div class="store-card disabled">
+                    <div class="icon">⚙️</div>
+                    <h3>Generadores</h3>
+                    <p>En desarrollo. Llegarán junto con nuevas mecánicas de supervivencia.</p>
+                    <button class="btn small" disabled>Próximamente</button>
+                </div>
+                <div class="store-card" onclick="window.location.href='https://astralismc.tip4serv.com/#tab_4'">
+                    <div class="icon">💎</div>
+                    <h3>Piedras</h3>
+                    <p>Piedras y recursos especiales para acelerar tus proyectos.</p>
+                    <button class="btn small">Ver piedras</button>
+                </div>
+            </div>
+        </section>
 
-<script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script>
-<script type="text/javascript" charset="UTF-8">
-document.addEventListener('DOMContentLoaded', function () {
-cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"dark","language":"es","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"Astralis Network"});
-});
-</script>
-  
-<a href="#" id="open_preferences_center"><button>Actualiza las preferencias de cookies</button></a>
-<a href="/privacy"><button>Política de privacidad</button></a>
-<a href="https://gdprvalidator.eu/website/gdpr_mhrnp12poh8qz4cwe529a56921e086c" target="_blank"><img width="180" src="https://gdprvalidator.eu/img/gdpr-badge.png" alt="GDPR Compliance Badge - checked by GDPRValidator.eu" /></a>
+        <!-- NOTICIAS -->
+        <section id="noticias" class="reveal">
+            <div class="eyebrow">Registro de transmisiones</div>
+            <h2 class="section-title">Noticias del servidor</h2>
 
+            <div class="log">
+                <div class="log-entry">
+                    <span class="log-date">BETA</span>
+                    <div>
+                        <h3>Nueva página web</h3>
+                        <p>Hemos lanzado una nueva página web, todavía en fase beta. Iremos puliendo detalles con vuestro feedback.</p>
+                    </div>
+                </div>
+                <div class="log-entry">
+                    <span class="log-date">TIENDA</span>
+                    <div>
+                        <h3>Nueva tienda</h3>
+                        <p>Ya puedes visitar nuestra tienda oficial para conseguir rangos y piedras especiales.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PADRES -->
+        <section id="padres" class="reveal">
+            <div class="eyebrow">Información importante</div>
+            <h2 class="section-title">Aviso para padres y tutores</h2>
+            <p class="section-sub">Transparencia total sobre cómo funcionan las compras dentro de Astralis Network.</p>
+
+            <div class="notice" id="notice">
+                <button class="notice-head" onclick="document.getElementById('notice').classList.toggle('open')">
+                    🔒 Transparencia sobre compras en Astralis Network
+                    <span class="chev">⌄</span>
+                </button>
+                <div class="notice-body">
+                    <div class="notice-body-inner">
+                        <p>Las compras (rangos, kits, etc.) en nuestro servidor son <strong>donaciones opcionales</strong> que nos ayudan a mantener el servidor operativo.</p>
+                        <p style="margin-top:1rem;"><strong>Funcionamiento básico:</strong></p>
+                        <ol>
+                            <li>El jugador selecciona un beneficio <strong>no esencial</strong> que mejora su experiencia de juego.</li>
+                            <li>El pago se procesa de forma segura a través de plataformas como PayPal o tarjeta de crédito.</li>
+                            <li>El beneficio virtual se activa en el juego.</li>
+                        </ol>
+                        <div class="risk">
+                            <strong>⚠️ Advertencia de riesgos — por favor, lea:</strong>
+                            <p style="margin-top:0.6rem;"><strong>Riesgo de gasto:</strong> nunca comparta datos de pago con sus hijos. Recomendamos desactivar o limitar las compras dentro de la aplicación para evitar cargos no autorizados.</p>
+                            <p style="margin-top:0.6rem;"><strong>No reembolsables:</strong> todos los artículos son virtuales y las compras se consideran donaciones. No se ofrecen reembolsos si la cuenta es sancionada o el jugador deja de jugar.</p>
+                            <p style="margin-top:0.6rem;"><strong>Seguridad:</strong> hable con su hijo sobre la seguridad en línea (no compartir información personal) y recuérdele reportar cualquier acoso o comportamiento inapropiado a nuestro equipo.</p>
+                        </div>
+                        <p style="margin-top:1rem;">Al realizar una compra, usted confirma ser el titular de la cuenta de pago y acepta nuestros términos. Para una explicación completa de los riesgos, el proceso de compra y las reglas del servidor, <a href="mailto:astralisnetmc@gmail.com" style="color:var(--cyan); text-decoration:underline;">envíenos un correo</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACTO -->
+        <section id="contacto" class="reveal">
+            <div class="eyebrow">Hablemos</div>
+            <h2 class="section-title">Contacto</h2>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="icon">📧</div>
+                    <h3>Correo</h3>
+                    <p>astralisnetmc@gmail.com</p>
+                    <button class="btn small" onclick="navigator.clipboard.writeText('astralisnetmc@gmail.com'); this.innerText='¡Copiado!'; setTimeout(()=>this.innerText='Copiar email',2000);">Copiar email</button>
+                </div>
+                <div class="contact-card">
+                    <div class="icon">🌐</div>
+                    <h3>Discord</h3>
+                    <p>Únete a nuestra comunidad y entérate de todo primero.</p>
+                    <button class="btn small" onclick="window.open('https://discord.gg/d3z7V4vG6x','_blank')">Unirse</button>
+                </div>
+                <div class="contact-card">
+                    <div class="icon">🎮</div>
+                    <h3>Servidor</h3>
+                    <p>IP: próximamente disponible.</p>
+                    <button class="btn small" disabled>Próximamente</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#" id="open_preferences_center"><button class="btn small ghost">Preferencias de cookies</button></a>
+            <a href="/privacy"><button class="btn small ghost">Política de privacidad</button></a>
+        </div>
+        <div class="footer-note">© 2025 Astralis Network — Todos los derechos reservados.</div>
+    </footer>
+
+    <button id="scrollTopBtn" aria-label="Subir arriba" onclick="window.scrollTo({top:0, behavior:'smooth'})">⬆</button>
+
+    <script>
+        /* ---------- Starfield ---------- */
+        const starsCanvas = document.getElementById('stars');
+        const ctxStars = starsCanvas.getContext('2d');
+        let stars = [];
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function resizeStars() {
+            starsCanvas.width = innerWidth;
+            starsCanvas.height = innerHeight;
+            stars = Array(160).fill().map(() => ({
+                x: Math.random() * innerWidth,
+                y: Math.random() * innerHeight,
+                size: Math.random() * 1.6 + 0.3,
+                speed: 0.15 + Math.random() * 0.35,
+                tw: Math.random() * Math.PI * 2
+            }));
+        }
+
+        function drawStars() {
+            ctxStars.clearRect(0, 0, innerWidth, innerHeight);
+            ctxStars.fillStyle = '#fff';
+            stars.forEach(s => {
+                s.tw += 0.02;
+                ctxStars.globalAlpha = 0.35 + Math.abs(Math.sin(s.tw)) * 0.55;
+                ctxStars.beginPath();
+                ctxStars.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctxStars.fill();
+                if (!reduceMotion) {
+                    s.y += s.speed;
+                    if (s.y > innerHeight) s.y = 0;
+                }
+            });
+            requestAnimationFrame(drawStars);
+        }
+        resizeStars();
+        drawStars();
+        addEventListener('resize', resizeStars);
+
+        /* ---------- Loader ---------- */
+        addEventListener('load', () => {
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 900);
+        });
+
+        /* ---------- Scroll top button ---------- */
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        addEventListener('scroll', () => {
+            scrollBtn.style.display = window.scrollY > 400 ? 'flex' : 'none';
+        });
+
+        /* ---------- Reveal on scroll ---------- */
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) e.target.classList.add('in');
+            });
+        }, {
+            threshold: 0.15
+        });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+        /* ---------- Server status (mcsrvstat) ---------- */
+        const SERVER_ADDRESS = "";
+
+        async function checkServer() {
+            const statusEl = document.getElementById('srv-status');
+            const playersEl = document.getElementById('srv-players');
+            const iconEl = document.getElementById('srv-icon');
+            const dotEl = document.getElementById('srv-dot');
+            try {
+                const res = await fetch(`https://api.mcsrvstat.us/3/${SERVER_ADDRESS}`);
+                const data = await res.json();
+
+                if (data.online) {
+                    dotEl.className = 'dot online';
+                    statusEl.textContent = 'ONLINE';
+                    playersEl.textContent = `${data.players.online} / ${data.players.max} jugadores conectados`;
+                    if (data.icon) {
+                        iconEl.src = data.icon;
+                        iconEl.style.display = 'block';
+                    } else {
+                        iconEl.style.display = 'none';
+                    }
+                } else {
+                    dotEl.className = 'dot offline';
+                    statusEl.textContent = 'OFFLINE';
+                    playersEl.textContent = '';
+                    iconEl.style.display = 'none';
+                }
+            } catch (e) {
+                dotEl.className = 'dot offline';
+                statusEl.textContent = 'El servidor todavía no está abierto.';
+                playersEl.textContent = 'Por favor, únete a nuestro Discord para obtener más información sobre la apertura.';
+                console.error('Error al obtener estado del servidor:', e);
+            }
+        }
+        checkServer();
+        setInterval(checkServer, 30000);
+
+        /* ---------- Discord widget ---------- */
+        async function loadDiscordStatus() {
+            const dotEl = document.getElementById('dc-dot');
+            const statusEl = document.getElementById('dc-status');
+            try {
+                const res = await fetch("https://discord.com/api/guilds/1151500409144365056/widget.json");
+                const data = await res.json();
+                dotEl.className = 'dot online';
+                statusEl.textContent = `${data.presence_count} en línea`;
+            } catch (e) {
+                dotEl.className = 'dot offline';
+                statusEl.textContent = 'Sin datos';
+                console.error('Error cargando Discord status:', e);
+            }
+        }
+        loadDiscordStatus();
+        setInterval(loadDiscordStatus, 30000);
+    </script>
+
+    <script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script>
+    <script type="text/javascript" charset="UTF-8">
+        document.addEventListener('DOMContentLoaded', function() {
+            cookieconsent.run({
+                "notice_banner_type": "simple",
+                "consent_type": "express",
+                "palette": "dark",
+                "language": "es",
+                "page_load_consent_levels": ["strictly-necessary"],
+                "notice_banner_reject_button_hide": false,
+                "preferences_center_close_button_hide": false,
+                "page_refresh_confirmation_buttons": false,
+                "website_name": "Astralis Network"
+            });
+        });
+    </script>
 </body>
+
 </html>
