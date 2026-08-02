@@ -1,379 +1,403 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Política de Privacidad — Astralis Network</title>
-  <meta name="description" content="Política de Privacidad y protección de datos de Astralis Network" />
-  <link rel="icon" href="favicon.png" type="image/png">
-  <link rel="apple-touch-icon" href="favicon.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidad | Astralis Network</title>
+<meta name="description" content="Política de Privacidad y protección de datos de Astralis Network">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png">
 
-  <style>
-    /* --- Copiado del estilo principal (Courier New, fondo radial, fadeIn...) --- */
-    * { margin:0; padding:0; box-sizing: border-box; font-family: "Courier New", monospace; }
-    html,body { height:100%; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
 
-    body{
-      background: radial-gradient(circle at top, #150b2e 0%, #080412 100%);
-      color: #fff;
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
+<style>
+  :root{
+    --void:        #05060f;
+    --panel:       #10142b;
+    --panel-line:  rgba(140,130,255,0.16);
+    --nebula:      #8b6bff;
+    --nebula-dim:  #5a48a8;
+    --cyan:        #49e0c8;
+    --gold:        #f4c15c;
+    --fog:         #9ba0bf;
+    --white:       #f3f2ff;
 
-    /* --- Canvas placeholders (same IDs para reusar scripts) --- */
-    canvas#stars, canvas#particles {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%; z-index: -2;
-    }
+    --font-display: "Space Grotesk", sans-serif;
+    --font-pixel:   "Press Start 2P", monospace;
+    --font-mono:    "JetBrains Mono", monospace;
 
-    /* --- Loader (igual que index) --- */
-    #loader {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: radial-gradient(circle, #1a0b2a 0%, #080412 100%);
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; z-index: 9999; transition: opacity 1s ease;
-    }
-    #loader.hidden { opacity: 0; pointer-events: none; }
-    .spinner {
-      width: 70px; height: 70px;
-      border: 4px solid rgba(180, 100, 255, 0.3);
-      border-top-color: #b180ff;
-      border-radius: 50%; animation: spin 1s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #loader p { color: #b180ff; margin-top: 1rem; font-size: 1.1rem; }
+    --radius: 14px;
+    --edge: 1px solid var(--panel-line);
+  }
 
-    /* --- Container principal --- */
-    .container {
-      width: 100%;
-      max-width: 980px;
-      margin: 6rem 20px;
-      background: rgba(20, 10, 40, 0.75);
-      border: 1px solid rgba(180,100,255,0.12);
-      border-radius: 12px;
-      padding: 28px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      animation: fadeIn 1s ease;
-    }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background: var(--void);
+    color: var(--white);
+    font-family: var(--font-display);
+    overflow-x:hidden;
+    position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+  ::selection{ background:var(--nebula); color:var(--white); }
+  :focus-visible{ outline:2px solid var(--cyan); outline-offset:3px; border-radius:4px; }
 
-    header {
-      display:flex; align-items:center; gap:14px; justify-content:flex-start;
-      margin-bottom: 8px;
-    }
-    .logo {
-      width:56px; height:56px; border-radius:10px;
-      background: linear-gradient(90deg,#b180ff,#7a42f4);
-      display:flex;align-items:center;justify-content:center;color:#0b0014;font-weight:bold;
-      box-shadow:0 8px 30px rgba(122,66,244,0.15);
-      flex: 0 0 56px;
-    }
-    header h1 {
-      font-size:1.6rem; margin:0;
-      background: linear-gradient(90deg,#b180ff,#7a42f4);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    }
-    header p { margin:0; color:#ccc; font-size:0.94rem; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
 
-    .muted { color:#cfc9e8; font-size:0.95rem; }
+  canvas#stars{ position:fixed; inset:0; width:100%; height:100%; z-index:-3; }
+  .nebula-fog{
+    position:fixed; inset:-10%; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(ellipse 40% 30% at 15% 20%, rgba(139,107,255,0.20), transparent 60%),
+      radial-gradient(ellipse 35% 30% at 85% 15%, rgba(73,224,200,0.14), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 90%, rgba(139,107,255,0.14), transparent 60%);
+    filter: blur(10px);
+    animation: fog-drift 40s ease-in-out infinite alternate;
+  }
+  @keyframes fog-drift{ from{ transform:translate3d(0,0,0) scale(1);} to{ transform:translate3d(-2%,2%,0) scale(1.05);} }
 
-    h2 { color:#b180ff; margin-top:18px; margin-bottom:10px; }
-    p, li { color:#e6e1f8; line-height:1.6; font-size:0.98rem; }
-    ul { margin-left:1.2rem; }
+  #loader{
+    position:fixed; inset:0; z-index:9999; background:var(--void);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1rem;
+    transition: opacity .6s ease, visibility .6s ease;
+  }
+  #loader.hidden{ opacity:0; visibility:hidden; }
+  .loader-cube{ width:36px; height:36px; background:linear-gradient(135deg,var(--nebula),var(--cyan)); border-radius:6px; animation: loader-spin 1.1s ease-in-out infinite; }
+  @keyframes loader-spin{ 0%,100%{ transform:rotate(0deg) scale(1);} 50%{ transform:rotate(180deg) scale(0.75);} }
+  #loader p{ font-family:var(--font-mono); font-size:0.8rem; letter-spacing:2px; color:var(--fog); text-transform:uppercase; }
 
-    .card {
-      background: rgba(10,6,20,0.3);
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-top:12px;
-      border: 1px solid rgba(180,100,255,0.06);
-      text-align: left;
-    }
+  .topbar{
+    position:sticky; top:0; z-index:500;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 0.9rem clamp(1.2rem, 4vw, 3rem);
+    background: rgba(5,6,15,0.75);
+    backdrop-filter: blur(14px);
+    border-bottom: var(--edge);
+  }
+  .brand{ display:flex; align-items:center; gap:0.6rem; font-family:var(--font-pixel); font-size:0.75rem; letter-spacing:1px; text-decoration:none; }
+  .brand .mark{ width:20px; height:20px; border-radius:5px; background:linear-gradient(135deg,var(--nebula),var(--cyan)); box-shadow:0 0 14px rgba(139,107,255,0.6); flex-shrink:0; }
 
-    .actions { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-start; }
-    .btn {
-      background:transparent; border:2px solid #7a42f4; color:white; padding:8px 12px; border-radius:10px;
-      cursor:pointer; transition: all .18s ease;
-    }
-    .btn:hover { background:#7a42f4; border-color:#b180ff; box-shadow:0 6px 18px rgba(122,66,244,0.12); }
+  .btn{
+    font-family: var(--font-display); font-weight:600; font-size:0.85rem; letter-spacing:0.3px;
+    color: var(--white); background: transparent; border: 1px solid var(--nebula);
+    border-radius: 8px; padding: 0.6rem 1.1rem; cursor:pointer; transition: all .25s ease;
+    text-decoration:none; display:inline-block;
+  }
+  .btn:hover{ background: var(--nebula); box-shadow: 0 0 18px rgba(139,107,255,0.55); transform: translateY(-1px); }
+  .btn.ghost{ border-color: var(--panel-line); color: var(--fog); }
+  .btn.ghost:hover{ background: rgba(139,107,255,0.12); color: var(--white); }
+  .btn.small{ padding:0.45rem 0.9rem; font-size:0.78rem; }
 
-    footer { margin-top:18px; color:#999; font-size:0.9rem; text-align:center; }
+  main{ max-width: 880px; margin: 0 auto; padding: clamp(2.5rem,6vw,4rem) clamp(1.2rem,4vw,3rem) 5rem; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+  .doc-head{ margin-bottom: 2.4rem; }
+  .eyebrow{
+    font-family: var(--font-mono); font-size:0.72rem; letter-spacing:3px; text-transform:uppercase;
+    color: var(--cyan); margin-bottom:0.9rem; display:flex; align-items:center; gap:0.6rem;
+  }
+  .eyebrow::before{ content:""; width:22px; height:1px; background:var(--cyan); }
+  .doc-head h1{ font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight:700; }
+  .doc-meta{ margin-top:0.8rem; color:var(--fog); font-family:var(--font-mono); font-size:0.85rem; }
+  .doc-meta strong{ color:var(--white); }
 
-    /* Responsive */
-    @media (max-width:720px){
-      .container { margin: 3rem 12px; padding:18px; }
-      header h1 { font-size:1.2rem; }
+  .legal-notice{
+    margin-top:1.6rem; padding:1rem 1.2rem; border-radius:10px;
+    background: rgba(244,193,92,0.07); border:1px solid rgba(244,193,92,0.25);
+    color: var(--fog); font-size:0.88rem; line-height:1.6;
+  }
+  .legal-notice strong{ color: var(--gold); }
+
+  .toc{
+    margin-top:2rem; padding:1.4rem 1.6rem;
+    background: var(--panel); border: var(--edge); border-radius: var(--radius);
+  }
+  .toc h2{ font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; color:var(--fog); font-family:var(--font-mono); margin-bottom:0.8rem; }
+  .toc ol{ list-style:none; display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem 1.5rem; }
+  .toc a{ font-size:0.9rem; color:var(--fog); text-decoration:none; transition:color .2s ease; }
+  .toc a:hover{ color:var(--cyan); }
+  @media (max-width:560px){ .toc ol{ grid-template-columns:1fr; } }
+
+  section.card{
+    margin-top:1.6rem;
+    background: var(--panel);
+    border: var(--edge);
+    border-radius: var(--radius);
+    padding: 1.8rem 2rem;
+    scroll-margin-top: 90px;
+  }
+  section.card h2{
+    font-size:1.15rem; color:var(--white); margin-bottom:0.9rem;
+    display:flex; align-items:center; gap:0.7rem;
+  }
+  section.card h2 .num{ font-family:var(--font-mono); font-size:0.8rem; color:var(--cyan); }
+  section.card p, section.card li{ color:var(--fog); line-height:1.75; font-size:0.95rem; }
+  section.card p + p{ margin-top:0.8rem; }
+  section.card ul, section.card ol.legal-list{ margin: 0.6rem 0 0 1.3rem; }
+  section.card li{ margin-bottom:0.4rem; }
+  section.card strong{ color:var(--white); }
+  section.card a{ color:var(--cyan); text-decoration:underline; }
+
+  .subgrid{ display:grid; gap:0.9rem; margin-top:0.9rem; }
+  .subrow{
+    display:grid; grid-template-columns: 160px 1fr; gap:1rem;
+    padding: 0.9rem 1rem; border-radius:10px;
+    background: rgba(139,107,255,0.05); border:1px solid var(--panel-line);
+  }
+  .subrow .k{ font-family:var(--font-mono); font-size:0.78rem; color:var(--white); }
+  .subrow .v{ font-size:0.88rem; color:var(--fog); line-height:1.6; }
+  @media (max-width:560px){ .subrow{ grid-template-columns:1fr; } }
+
+  .actions-row{ margin-top:1.2rem; display:flex; gap:0.8rem; flex-wrap:wrap; }
+
+  footer{
+    border-top: var(--edge);
+    padding: 2rem clamp(1.2rem,4vw,3rem) 2.6rem;
+    display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between;
+    max-width:880px; margin:0 auto;
+  }
+  .footer-note{ color:var(--fog); font-size:0.82rem; font-family:var(--font-mono); }
+
+  #back-fab{
+    position:fixed; left:20px; bottom:20px; z-index:400;
+  }
 </style>
 </head>
-
 <body>
-  <!-- Loader -->
-  <div id="loader">
-    <div class="spinner"></div>
-    <p>Cargando la galaxia...</p>
-  </div>
 
-  <!-- Fondos (canvas) -->
+  <div id="loader"><div class="loader-cube"></div><p>Cargando la galaxia…</p></div>
   <canvas id="stars"></canvas>
-  <canvas id="particles"></canvas>
+  <div class="nebula-fog"></div>
 
-  <!-- Contenido -->
-  <main class="container" role="main" aria-labelledby="title">
-    <header>
-      <div class="logo"><img>favicon.png</img></div>
-      <div>
-        <h1 id="title">Política de Privacidad</h1>
-        <p class="muted">Astralis Network (Proyecto comunitario) — Última actualización: <strong id="lastUpdated">21 de octubre de 2025</strong></p>
+  <header class="topbar">
+    <a href="index.html" class="brand"><span class="mark"></span>ASTRALIS</a>
+    <a href="index.html" class="btn ghost small">⟵ Volver al inicio</a>
+  </header>
+
+  <main>
+    <div class="doc-head">
+      <div class="eyebrow">Documento legal</div>
+      <h1>Política de Privacidad</h1>
+      <p class="doc-meta"><strong>Astralis Network</strong> (proyecto comunitario de Minecraft) · Última actualización: <strong id="lastUpdated">2 de agosto de 2026</strong></p>
+      <div class="legal-notice">
+        <strong>Nota:</strong> este documento describe de forma clara y honesta cómo tratamos tus datos. No sustituye el asesoramiento de un profesional del derecho; si vas a operar pagos, comunidad y datos de menores a mayor escala, te recomendamos que lo revise un abogado especializado en protección de datos antes de considerarlo una cobertura legal definitiva.
       </div>
-    </header>
+    </div>
 
-    <!-- Introducción -->
-    <section class="card" aria-label="Introducción">
-      <h2>1. Introducción</h2>
-      <p>En <strong>Astralis Network (Proyecto comunitario)</strong> estamos comprometidos con la protección de tus datos personales y el cumplimiento del Reglamento General de Protección de Datos (RGPD). Esta Política describe qué datos recolectamos, con qué fines, sobre qué base legal, cuánto tiempo los conservamos y cómo puedes ejercer tus derechos.</p>
+    <nav class="toc" aria-label="Índice">
+      <h2>Índice</h2>
+      <ol>
+        <li><a href="#s1">1. Introducción</a></li>
+        <li><a href="#s2">2. Responsable del tratamiento</a></li>
+        <li><a href="#s3">3. Datos que recopilamos</a></li>
+        <li><a href="#s4">4. Finalidades y bases legales</a></li>
+        <li><a href="#s5">5. Terceros y encargados</a></li>
+        <li><a href="#s6">6. Transferencias internacionales</a></li>
+        <li><a href="#s7">7. Cookies y tecnologías similares</a></li>
+        <li><a href="#s8">8. Conservación de los datos</a></li>
+        <li><a href="#s9">9. Tus derechos</a></li>
+        <li><a href="#s10">10. Seguridad</a></li>
+        <li><a href="#s11">11. Menores de edad</a></li>
+        <li><a href="#s12">12. Compras y pagos</a></li>
+        <li><a href="#s13">13. Comunidad de Discord</a></li>
+        <li><a href="#s14">14. Cambios en esta política</a></li>
+        <li><a href="#s15">15. Legislación y reclamaciones</a></li>
+        <li><a href="#s16">16. Contacto</a></li>
+      </ol>
+    </nav>
+
+    <section class="card" id="s1">
+      <h2><span class="num">01</span>Introducción</h2>
+      <p>En <strong>Astralis Network</strong> nos tomamos en serio la protección de tus datos personales. Esta política explica, en un lenguaje lo más claro posible, qué datos recopilamos cuando visitas nuestra web, juegas en el servidor o interactúas con nuestra comunidad de Discord, con qué finalidad los usamos, en qué nos basamos legalmente para ello, cuánto tiempo los conservamos y cómo puedes ejercer tus derechos.</p>
+      <p>Al usar astralismc.xyz, nuestro servidor de Minecraft o nuestro servidor de Discord, aceptas las prácticas descritas en este documento. Si no estás de acuerdo, te pedimos que no utilices nuestros servicios.</p>
     </section>
 
-    <!-- Responsable -->
-    <section class="card" aria-label="Responsable">
-      <h2>2. Responsable del tratamiento</h2>
-      <p><strong>Astralis Network (Proyecto comunitario)</strong></p>
-      <p class="muted">Correo de contacto: <a href="mailto:astralisnetmc@gmail.com" style="color:#b180ff">astralisnetmc@gmail.com</a></p>
+    <section class="card" id="s2">
+      <h2><span class="num">02</span>Responsable del tratamiento</h2>
+      <p><strong>Astralis Network</strong> es un proyecto comunitario de Minecraft, sin personalidad jurídica propia, gestionado por su administrador/es.</p>
+      <div class="subrow">
+        <span class="k">Contacto</span>
+        <span class="v"><a href="mailto:astralisnetmc@gmail.com">astralisnetmc@gmail.com</a></span>
+      </div>
+      <p>Si en el futuro el proyecto se constituye como entidad legal (asociación, autónomo, empresa), esta sección se actualizará con los datos identificativos completos, tal como exige la normativa.</p>
     </section>
 
-    <!-- Datos recopilados -->
-    <section class="card" aria-label="Datos que recopilamos">
-      <h2>3. Datos que recopilamos</h2>
-      <p>Podemos recopilar y procesar las siguientes categorías de datos personales, según la interacción que tengas con nosotros:</p>
+    <section class="card" id="s3">
+      <h2><span class="num">03</span>Datos que recopilamos</h2>
+      <p>Recopilamos distintas categorías de datos según cómo interactúes con nosotros:</p>
       <ul>
-        <li><strong>Datos de identificación y contacto:</strong> correo electrónico, nombre si lo facilitas en formularios.</li>
-        <li><strong>Datos técnicos:</strong> dirección IP, identificadores temporales, logs del servidor, información del navegador.</li>
-        <li><strong>Datos de terceros:</strong> datos públicos de Discord (por ejemplo nombre público o presencia) usados únicamente para mostrar estadísticas públicas.</li>
-        <li><strong>Preferencias:</strong> selección del centro de cookies, idioma y otras preferencias que el usuario configure.</li>
+        <li><strong>Datos de identificación y contacto:</strong> correo electrónico y nombre, cuando nos escribes o rellenas un formulario.</li>
+        <li><strong>Datos de la cuenta de juego:</strong> tu nombre de usuario de Minecraft (nick), UUID de tu cuenta, y datos de tu partida (inventario, estadísticas, historial de sanciones, IP de conexión) necesarios para prestar el servicio.</li>
+        <li><strong>Datos técnicos de navegación:</strong> dirección IP, tipo de navegador y dispositivo, páginas visitadas y registros (logs) del servidor web, recogidos automáticamente por motivos de seguridad y diagnóstico.</li>
+        <li><strong>Datos de Discord:</strong> identificador público de usuario y presencia agregada, obtenidos únicamente a través de la API pública de Discord para mostrar estadísticas de la comunidad.</li>
+        <li><strong>Datos de compra:</strong> si realizas una donación o compra en la tienda, el propio procesador de pagos gestiona los datos bancarios; nosotros solo recibimos confirmación de la compra, el producto adquirido y el identificador de tu cuenta de juego para poder entregarte el beneficio.</li>
+        <li><strong>Preferencias:</strong> tu elección en el panel de cookies y otras preferencias que configures en el sitio.</li>
       </ul>
     </section>
 
-    <!-- Finalidades y bases -->
-    <section class="card" aria-label="Finalidades y bases legales">
-      <h2>4. Finalidades y bases legales</h2>
-      <p>Tratamos tus datos por las siguientes razones:</p>
-      <ul>
-        <li><strong>Prestación del servicio y administración del servidor:</strong> gestión de estado del servidor, diagnóstico y seguridad — <em>ejecución de contrato / interés legítimo</em>.</li>
-        <li><strong>Comunicación y soporte:</strong> responder a consultas y soporte técnico — <em>ejecución de contrato / interés legítimo</em>.</li>
-        <li><strong>Cookies y analítica:</strong> medir y mejorar el sitio web — <em>consentimiento</em> cuando corresponda.</li>
-        <li><strong>Integraciones con terceros:</strong> uso de APIs públicas (Discord, mcsrvstat) para mostrar datos públicos — <em>interés legítimo</em>.</li>
-      </ul>
-    </section>
-
-    <!-- Terceros -->
-    <section class="card" aria-label="Terceros">
-      <h2>5. Terceros y transferencias</h2>
-      <p>Algunas operaciones implican la comunicación de datos con terceros proveedores, p. ej.:</p>
-      <ul>
-        <li><strong>Discord</strong> — widget/API (datos públicos y presencia).</li>
-        <li><strong>mcsrvstat.us</strong> — consulta del estado del servidor.</li>
-        <li><strong>Proveedor de consentimiento de cookies</strong> (TermsFeed o similar).</li>
-        <li><strong>Plataformas de pago</strong> (si aplica): PayPal, Stripe, etc. — Tratamiento según sus propias políticas.</li>
-      </ul>
-      <p class="muted">Cuando exista transferencia internacional, adoptaremos las garantías necesarias (cláusulas contractuales estándar u otras medidas adecuadas).</p>
-    </section>
-
-    <!-- Cookies -->
-    <section class="card" aria-label="Cookies">
-      <h2>6. Cookies y tecnologías similares</h2>
-      <p>Utilizamos cookies y tecnologías similares para ofrecer el servicio, recordar preferencias y medir uso anónimo. Las categorías usadas son:</p>
-      <ul>
-        <li><strong>Necesarias:</strong> esenciales para el funcionamiento del sitio (no requieren consentimiento).</li>
-        <li><strong>Preferencias:</strong> recordar idioma o configuración visual.</li>
-        <li><strong>Analítica:</strong> medir rendimiento (solo con consentimiento).</li>
-        <li><strong>Marketing:</strong> si otorgas consentimiento explícito.</li>
-      </ul>
-
-      <div class="actions">
-        <a href="#" id="open_preferences_center"><button class="btn">Actualiza las preferencias de cookies</button></a>
-
-        <button id="downloadPdf" class="btn">Descargar Política (PDF)</button>
+    <section class="card" id="s4">
+      <h2><span class="num">04</span>Finalidades y bases legales</h2>
+      <p>Tratamos tus datos para los siguientes fines y sobre las siguientes bases legales del RGPD (art. 6):</p>
+      <div class="subgrid">
+        <div class="subrow"><span class="k">Prestar el servicio</span><span class="v">Gestionar tu cuenta de juego, aplicar rangos comprados y mantener el servidor en funcionamiento — <strong>ejecución de un contrato/relación de servicio</strong>.</span></div>
+        <div class="subrow"><span class="k">Seguridad y prevención</span><span class="v">Detectar trampas, ataques (DDoS), abuso o comportamiento inapropiado — <strong>interés legítimo</strong>.</span></div>
+        <div class="subrow"><span class="k">Soporte y comunicación</span><span class="v">Responder tickets, correos y mensajes de soporte — <strong>ejecución de contrato / interés legítimo</strong>.</span></div>
+        <div class="subrow"><span class="k">Cookies no esenciales</span><span class="v">Medir uso del sitio o personalizar contenido — <strong>consentimiento</strong>, revocable en cualquier momento.</span></div>
+        <div class="subrow"><span class="k">Gestión de compras</span><span class="v">Procesar donaciones/compras y entregar los beneficios adquiridos — <strong>ejecución de contrato</strong>.</span></div>
+        <div class="subrow"><span class="k">Obligaciones legales</span><span class="v">Conservar determinados registros cuando la ley lo exija — <strong>cumplimiento de obligación legal</strong>.</span></div>
       </div>
     </section>
 
-    <!-- Conservación -->
-    <section class="card" aria-label="Conservacion">
-      <h2>7. Conservación de los datos</h2>
-      <p>Conservamos los datos durante el tiempo necesario para cumplir las finalidades descritas y según obligaciones legales.</p>
+    <section class="card" id="s5">
+      <h2><span class="num">05</span>Terceros y encargados del tratamiento</h2>
+      <p>Para operar el servidor y la web, compartimos ciertos datos con proveedores que actúan como encargados del tratamiento o que reciben datos públicos:</p>
       <ul>
-        <li>Logs de servidor: Los eliminamos cada 12 meses, salvo necesidad de seguridad.</li>
-        <li>Mensajes de soporte en Discord: se mantienen por siempre en un canal disponible para el staff. Se puede solicitar su eliminación o visión pero no será posible editarlos, ya que es una transcripción generada del chat del "ticket" en ese momento.</li>
-        <li>Datos de compra: según obligaciones fiscales y contractuales aplicables en cada país. Generalmente, no se suelen eliminarp or motivos de seguridad.</li>
+        <li><strong>Discord Inc.</strong> — al usar nuestro widget de Discord y nuestro servidor de Discord, Discord trata los datos conforme a su propia política de privacidad.</li>
+        <li><strong>mcsrvstat.us</strong> — consulta pública del estado del servidor (jugadores online); no le enviamos datos personales tuyos.</li>
+        <li><strong>tip4serv</strong> (tienda oficial) y su procesador de pagos (PayPal, tarjeta de crédito u otros habilitados) — gestionan la transacción de tu compra o donación bajo sus propias políticas de privacidad.</li>
+        <li><strong>TermsFeed</strong> — proveedor del panel de gestión de consentimiento de cookies.</li>
+        <li><strong>Proveedor de alojamiento (hosting)</strong> — almacena la web y/o el servidor de juego.</li>
+      </ul>
+      <p>No vendemos ni cedemos tus datos personales a terceros con fines comerciales o publicitarios.</p>
+    </section>
+
+    <section class="card" id="s6">
+      <h2><span class="num">06</span>Transferencias internacionales</h2>
+      <p>Algunos de los proveedores mencionados (por ejemplo, Discord) pueden tratar datos fuera del Espacio Económico Europeo, principalmente en Estados Unidos. En esos casos, dichos proveedores se basan en mecanismos de transferencia reconocidos por el RGPD, como cláusulas contractuales tipo o decisiones de adecuación. Te recomendamos revisar la política de privacidad del proveedor concreto para más detalle.</p>
+    </section>
+
+    <section class="card" id="s7">
+      <h2><span class="num">07</span>Cookies y tecnologías similares</h2>
+      <p>Usamos cookies y almacenamiento local para que la web funcione y, si lo autorizas, para medir su uso. Las categorías son:</p>
+      <ul>
+        <li><strong>Necesarias:</strong> imprescindibles para el funcionamiento básico del sitio (p. ej. recordar tu elección de cookies). No requieren consentimiento.</li>
+        <li><strong>Preferencias:</strong> recuerdan ajustes como idioma o configuración visual.</li>
+        <li><strong>Analítica:</strong> nos ayudan a entender el uso del sitio de forma agregada. Solo se activan con tu consentimiento.</li>
+        <li><strong>Marketing:</strong> solo si en algún momento las activamos y das tu consentimiento explícito.</li>
+      </ul>
+      <p>Puedes cambiar tu elección cuando quieras desde el panel de preferencias.</p>
+      <div class="actions-row">
+        <a href="#" id="open_preferences_center" class="btn small">Gestionar preferencias de cookies</a>
+      </div>
+    </section>
+
+    <section class="card" id="s8">
+      <h2><span class="num">08</span>Conservación de los datos</h2>
+      <ul>
+        <li><strong>Logs técnicos del servidor:</strong> se eliminan automáticamente a los 12 meses, salvo que sean necesarios para investigar un incidente de seguridad en curso.</li>
+        <li><strong>Datos de cuenta de juego:</strong> se conservan mientras la cuenta esté activa; si solicitas la baja, se eliminan salvo que deban conservarse por sanciones activas o por obligación legal.</li>
+        <li><strong>Transcripciones de soporte en Discord (tickets):</strong> se conservan de forma indefinida en un canal accesible solo para el equipo, como garantía frente a reclamaciones. Puedes solicitar acceso o eliminación, aunque por tratarse de una transcripción no se pueden editar de forma parcial.</li>
+        <li><strong>Datos de compras:</strong> se conservan durante el plazo exigido por la normativa fiscal y contable aplicable (en España, con carácter general, hasta 6 años); por motivos de seguridad y prevención de fraude, no se eliminan aunque expire dicho plazo salvo solicitud expresa y siempre que no exista obligación de conservarlos.</li>
       </ul>
     </section>
 
-    <!-- Derechos -->
-    <section class="card" aria-label="Derechos">
-      <h2>8. Derechos del interesado</h2>
-      <p>Tienes derecho a solicitar:</p>
-      <ul>
-        <li>Acceso a tus datos.</li>
-        <li>Rectificación de datos inexactos.</li>
-        <li>Supresión (cuando proceda).</li>
-        <li>Limitación del tratamiento.</li>
-        <li>Portabilidad de tus datos.</li>
-        <li>Retirar el consentimiento y oponerte al tratamiento.</li>
-      </ul>
-      <p>Para ejercer estos derechos, escribe a <a href="mailto:astralisnetmc@gmail.com" style="color:#b180ff">astralisnetmc@gmail.com</a>. Responderemos dentro de máximo 1 mes. Para ser más rápido, se puede solicitarlo via Discord.</p>
+    <section class="card" id="s9">
+      <h2><span class="num">09</span>Tus derechos</h2>
+      <p>Conforme al RGPD y la LOPDGDD, puedes ejercer en cualquier momento y de forma gratuita los siguientes derechos:</p>
+      <ol class="legal-list">
+        <li><strong>Acceso:</strong> saber qué datos tenemos sobre ti.</li>
+        <li><strong>Rectificación:</strong> corregir datos inexactos o incompletos.</li>
+        <li><strong>Supresión:</strong> pedir que borremos tus datos cuando ya no sean necesarios.</li>
+        <li><strong>Limitación:</strong> restringir el tratamiento en determinados casos.</li>
+        <li><strong>Portabilidad:</strong> recibir tus datos en un formato estructurado.</li>
+        <li><strong>Oposición:</strong> oponerte a un tratamiento basado en interés legítimo.</li>
+        <li><strong>Retirar el consentimiento:</strong> en cualquier momento, sin afectar a la licitud del tratamiento previo.</li>
+      </ol>
+      <p>Para ejercerlos, escríbenos a <a href="mailto:astralisnetmc@gmail.com">astralisnetmc@gmail.com</a> indicando el derecho que quieres ejercer y acreditando tu identidad. Responderemos en el plazo máximo de un mes. Si prefieres una gestión más ágil, puedes abrir un ticket en nuestro Discord.</p>
     </section>
 
-    <!-- Seguridad -->
-    <section class="card" aria-label="Seguridad">
-      <h2>9. Seguridad</h2>
-      <p>Hemos implementado medidas técnicas y organizativas para proteger tus datos frente a pérdida, alteración o acceso no autorizado. Sin embargo, ningún sistema es 100 % infalible; por ello te pedimos que nos comuniques cualquier incidente.</p>
+    <section class="card" id="s10">
+      <h2><span class="num">10</span>Seguridad</h2>
+      <p>Aplicamos medidas técnicas y organizativas razonables (control de accesos, copias de seguridad, cifrado en tránsito cuando es posible) para proteger tus datos frente a pérdida, uso indebido o acceso no autorizado. Ningún sistema es completamente infalible: si detectas o sospechas una brecha de seguridad, te pedimos que nos lo comuniques de inmediato a nuestro correo de contacto.</p>
     </section>
 
-    <!-- Menores -->
-    <section class="card" aria-label="Menores">
-      <h2>10. Menores</h2>
-      <p>Nuestro servicio no está dirigido a menores de edad sin autorización de los padres o tutores. No solicitamos intencionadamente datos personales de menores; si descubrimos que se han facilitado, procederemos a su eliminación cuando sea procedente.</p>
+    <section class="card" id="s11">
+      <h2><span class="num">11</span>Menores de edad</h2>
+      <p>Minecraft es un juego con jugadores de distintas edades, incluidos menores. Cuando el jugador sea menor de edad, el uso del servidor y, en especial, cualquier compra en la tienda, debe contar con la autorización y supervisión de su padre, madre o tutor legal, quien es responsable de configurar los controles parentales de pago que consideren oportunos.</p>
+      <p>No solicitamos intencionadamente más datos de menores que los estrictamente necesarios para jugar (nick y datos técnicos de conexión). Si un padre, madre o tutor legal detecta que se han facilitado datos adicionales de un menor sin su consentimiento, puede solicitar su eliminación escribiendo a <a href="mailto:astralisnetmc@gmail.com">astralisnetmc@gmail.com</a>, y procederemos a revisarlo y, si corresponde, eliminarlo.</p>
     </section>
 
-    <!-- Cambios -->
-    <section class="card" aria-label="Cambios">
-      <h2>11. Cambios en esta política</h2>
-      <p>Podemos actualizar esta Política. Publicaremos la fecha de “Última actualización” en la cabecera. Si los cambios son significativos, te lo comunicaremos por los canales disponibles.</p>
+    <section class="card" id="s12">
+      <h2><span class="num">12</span>Compras y pagos</h2>
+      <p>Las compras se realizan a través de nuestra tienda oficial (tip4serv) y se procesan mediante pasarelas de pago externas (PayPal, tarjeta u otras habilitadas por dicha plataforma). Astralis Network <strong>no almacena ni tiene acceso</strong> a tus datos bancarios o de tarjeta; estos son tratados exclusivamente por el procesador de pago correspondiente.</p>
+      <p>Todos los artículos comprados son de naturaleza virtual, se consideran donaciones voluntarias al proyecto y, salvo que la ley disponga lo contrario, <strong>no son reembolsables</strong>, incluso si la cuenta es posteriormente sancionada por incumplir las normas del servidor o si el jugador deja de participar.</p>
     </section>
 
-    <!-- Contacto -->
-    <section class="card" aria-label="Contacto">
-      <h2>12. Contacto y reclamaciones</h2>
-      <p>Contacto: <a href="mailto:astralisnetmc@gmail.com" style="color:#b180ff">astralisnetmc@gmail.com</a></p>
-      <p class="muted">Si consideras que no hemos atendido tus derechos, puedes presentar una reclamación ante la autoridad de control competente (por ejemplo, la Agencia Española de Protección de Datos).</p>
+    <section class="card" id="s13">
+      <h2><span class="num">13</span>Comunidad de Discord</h2>
+      <p>Nuestro servidor de Discord es un espacio gestionado por Discord Inc. bajo sus propios términos y política de privacidad. Los mensajes, tickets de soporte y demás interacciones dentro de Discord están sujetos, además de a esta política, a las normas de dicha plataforma. Te recomendamos revisar la política de privacidad de Discord para entender cómo trata tus datos a nivel de plataforma.</p>
     </section>
 
-    <footer>
-      <p style="margin-top:8px">© 2025 Astralis Network (Proyecto comunitario)</p>
-    </footer>
+    <section class="card" id="s14">
+      <h2><span class="num">14</span>Cambios en esta política</h2>
+      <p>Podemos actualizar esta política para reflejar cambios legales, técnicos u organizativos. La fecha de "Última actualización" en la cabecera indica la versión vigente. Si el cambio es sustancial, lo anunciaremos a través de nuestros canales habituales (web o Discord).</p>
+    </section>
+
+    <section class="card" id="s15">
+      <h2><span class="num">15</span>Legislación aplicable y reclamaciones</h2>
+      <p>Esta política se rige por el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD), así como por la normativa española e de la Unión Europea que resulte aplicable.</p>
+      <p>Si consideras que no hemos atendido correctamente tus derechos, puedes presentar una reclamación ante la <strong>Agencia Española de Protección de Datos (AEPD)</strong> — <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a> — o ante la autoridad de control de tu país de residencia dentro de la UE.</p>
+    </section>
+
+    <section class="card" id="s16">
+      <h2><span class="num">16</span>Contacto</h2>
+      <p>Para cualquier duda sobre esta política o sobre el tratamiento de tus datos, puedes escribirnos a <a href="mailto:astralisnetmc@gmail.com">astralisnetmc@gmail.com</a> o a través de nuestro servidor de Discord.</p>
+    </section>
   </main>
 
-  <!-- Enlace opcional para volver al index -->
-  <a href="index.html" style="position:fixed; left:18px; bottom:18px; text-decoration:none;">
-    <button class="btn" style="padding:10px 14px; border-radius:10px;">⟵ Volver</button>
+  <footer>
+    <div class="footer-note">© 2026 Astralis Network — Todos los derechos reservados.</div>
+    <a href="index.html" class="btn ghost small">⟵ Volver al inicio</a>
+  </footer>
+
+  <a href="index.html" id="back-fab" aria-label="Volver al inicio">
+    <button class="btn small">⟵ Inicio</button>
   </a>
 
-  <!-- Cursor visual (sin ocultar cursor sistema por accesibilidad) -->
-  <div id="custom-cursor" aria-hidden="true"></div>
-
-  <!-- Scripts: estrellas, partículas, loader, cursor, open preferences, pdf download -->
   <script>
-    // --- Stars canvas (copiado del index) ---
     const starsCanvas = document.getElementById('stars');
-    const ctxStars = starsCanvas?.getContext?.('2d');
+    const ctxStars = starsCanvas.getContext('2d');
     let stars = [];
-    function resizeStars() {
-      if(!starsCanvas) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resizeStars(){
       starsCanvas.width = innerWidth; starsCanvas.height = innerHeight;
-      stars = Array(200).fill().map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,size:Math.random()*1.8,speed:0.2+Math.random()*0.5}));
+      stars = Array(140).fill().map(() => ({
+        x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+        size: Math.random()*1.6 + 0.3, speed: 0.15 + Math.random()*0.35, tw: Math.random()*Math.PI*2
+      }));
     }
     function drawStars(){
-      if(!ctxStars) return;
       ctxStars.clearRect(0,0,innerWidth,innerHeight);
-      ctxStars.fillStyle="#fff";
-      stars.forEach(s=>{ctxStars.globalAlpha=Math.random()*0.8+0.2;ctxStars.beginPath();ctxStars.arc(s.x,s.y,s.size,0,Math.PI*2);ctxStars.fill();s.y+=s.speed;if(s.y>innerHeight)s.y=0;});
+      ctxStars.fillStyle = '#fff';
+      stars.forEach(s => {
+        s.tw += 0.02;
+        ctxStars.globalAlpha = 0.35 + Math.abs(Math.sin(s.tw))*0.55;
+        ctxStars.beginPath(); ctxStars.arc(s.x, s.y, s.size, 0, Math.PI*2); ctxStars.fill();
+        if(!reduceMotion){ s.y += s.speed; if(s.y > innerHeight) s.y = 0; }
+      });
       requestAnimationFrame(drawStars);
     }
-    resizeStars(); drawStars(); addEventListener('resize',resizeStars);
+    resizeStars(); drawStars();
+    addEventListener('resize', resizeStars);
 
-    // --- Particles moradas (copiado del index) ---
-    const particlesCanvas = document.getElementById('particles');
-    const ctxP = particlesCanvas?.getContext?.('2d');
-    let particles = [];
-    function resizeParticles(){
-      if(!particlesCanvas) return;
-      particlesCanvas.width = innerWidth; particlesCanvas.height = innerHeight;
-      particles=Array(50).fill().map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:2+Math.random()*3,dx:(Math.random()-.5)*.3,dy:(Math.random()-.5)*.3}));
-    }
-    function drawParticles(){
-      if(!ctxP) return;
-      ctxP.clearRect(0,0,innerWidth,innerHeight);
-      ctxP.fillStyle="#b180ff";
-      particles.forEach(p=>{ctxP.globalAlpha=.5+Math.random()*.5;ctxP.beginPath();ctxP.arc(p.x,p.y,p.r,0,Math.PI*2);ctxP.fill();p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>innerWidth)p.dx*=-1;if(p.y<0||p.y>innerHeight)p.dy*=-1;});
-      requestAnimationFrame(drawParticles);
-    }
-    resizeParticles(); drawParticles(); addEventListener('resize',resizeParticles);
-
-    // --- Loader hide on load ---
-    window.addEventListener("load",()=>{ setTimeout(()=>{ const L=document.getElementById('loader'); if(L) L.classList.add('hidden'); }, 900); });
-
-    // --- Cursor visual (small, follows pointer) ---
-    (function initCursor(){
-      const cur = document.getElementById('custom-cursor');
-      if(!cur) return;
-      let mx=0,my=0,cx=0,cy=0;
-      document.addEventListener('mousemove', e=>{
-        mx=e.clientX; my=e.clientY;
-        cur.style.left = mx + 'px';
-        cur.style.top = my + 'px';
-      });
-      // small smoothing loop
-      function loop(){ requestAnimationFrame(loop); cx += (mx-cx)*0.25; cy += (my-cy)*0.25; cur.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`; }
-      loop();
-    })();
-
-    // --- Abrir centro de preferencias (usa el ID global si existe en el index.js del sitio) ---
-    document.getElementById('openPreferences')?.addEventListener('click', ()=>{
-      // Si el botón global existe en la página padre (si se abre desde index con mismo origin)
-      try {
-        const local = document.getElementById('open_preferences_center');
-        if(local) { local.click(); return; }
-        // intentar en parent/opener (solo si same-origin)
-        const openerEl = window.opener?.document?.getElementById('open_preferences_center') || window.parent?.document?.getElementById('open_preferences_center');
-        if(openerEl) { openerEl.click(); return; }
-      } catch(e){ /* cross-origin posible */ }
-      alert('Si estas en GitHub Pages, asegúrate de abrir la página principal y usar el botón de preferencias de cookies.'); 
+    addEventListener('load', () => {
+      setTimeout(() => document.getElementById('loader').classList.add('hidden'), 700);
     });
-
-    // --- Descargar PDF: genera impresión con el contenido principal ---
-    document.getElementById('downloadPdf')?.addEventListener('click', ()=>{
-      const main = document.querySelector('main.container');
-      if(!main) { alert('Contenido no encontrado'); return; }
-      const w = window.open('', '_blank');
-      if(!w) { alert('Permite popups para descargar el PDF'); return; }
-      const css = `
-        body{font-family: "Courier New", monospace; padding:20px; color:#111; background:#fff;}
-        h1{color:#4b2bb0;}
-      `;
-      w.document.write('<html><head><title>Política de Privacidad — Astralis Network</title><style>'+css+'</style></head><body>');
-      w.document.write(main.innerText.replace(/\n\s+\n/g,'\n\n'));
-      w.document.write('</body></html>');
-      w.document.close();
-      w.focus();
-      w.print();
-    });
-
-    // --- Insertar fecha ---
-    document.getElementById('lastUpdated').textContent = '21 de octubre de 2025';
   </script>
-  <!-- Cookie Consent by TermsFeed https://www.TermsFeed.com -->
-<script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script>
-<script type="text/javascript" charset="UTF-8">
-document.addEventListener('DOMContentLoaded', function () {
-cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"dark","language":"es","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"Astralis Network"});
-});
-</script>
 
-<noscript>Herramienta de consentimiento de cookies gratuita de <a href="https://www.termsfeed.com/">TermsFeed</a></noscript>
-<!-- End Cookie Consent by TermsFeed https://www.TermsFeed.com -->
-
- <style>
-
-</style>
-
+  <script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script>
+  <script type="text/javascript" charset="UTF-8">
+    document.addEventListener('DOMContentLoaded', function () {
+      cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"dark","language":"es","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"Astralis Network"});
+    });
+  </script>
+  <noscript>Herramienta de consentimiento de cookies gratuita de <a href="https://www.termsfeed.com/">TermsFeed</a></noscript>
 </body>
 </html>
